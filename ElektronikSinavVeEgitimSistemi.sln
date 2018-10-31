@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElektronikSinavVeEgitimSistemi", "ElektronikSinavVeEgitimSistemi\ElektronikSinavVeEgitimSistemi.csproj", "{F81E46DC-CA46-4ADA-A834-20D2B06C0121}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElektronikSinavVeEgitimSistemi", "ElektronikSinavVeEgitimSistemi\ElektronikSinavVeEgitimSistemi.csproj", "{F81E46DC-CA46-4ADA-A834-20D2B06C0121}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{673990F5-029A-4314-A589-8B01CBE43C67}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{AB08DA52-9480-42A3-9FFE-B9A72BAFD5BB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityLayer", "EntityLayer\EntityLayer.csproj", "{6DA61083-9459-490E-A691-E6B24FA4795E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElektronikSinavVeEgitimSistemiKullaniciPaneli", "ElektronikSinavVeEgitimSistemiKullaniciPaneli\ElektronikSinavVeEgitimSistemiKullaniciPaneli.csproj", "{0B2E9F0F-1835-4D76-87EE-C2CA369191AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +23,22 @@ Global
 		{F81E46DC-CA46-4ADA-A834-20D2B06C0121}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F81E46DC-CA46-4ADA-A834-20D2B06C0121}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F81E46DC-CA46-4ADA-A834-20D2B06C0121}.Release|Any CPU.Build.0 = Release|Any CPU
+		{673990F5-029A-4314-A589-8B01CBE43C67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{673990F5-029A-4314-A589-8B01CBE43C67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{673990F5-029A-4314-A589-8B01CBE43C67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{673990F5-029A-4314-A589-8B01CBE43C67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB08DA52-9480-42A3-9FFE-B9A72BAFD5BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB08DA52-9480-42A3-9FFE-B9A72BAFD5BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB08DA52-9480-42A3-9FFE-B9A72BAFD5BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB08DA52-9480-42A3-9FFE-B9A72BAFD5BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DA61083-9459-490E-A691-E6B24FA4795E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DA61083-9459-490E-A691-E6B24FA4795E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DA61083-9459-490E-A691-E6B24FA4795E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DA61083-9459-490E-A691-E6B24FA4795E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B2E9F0F-1835-4D76-87EE-C2CA369191AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B2E9F0F-1835-4D76-87EE-C2CA369191AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B2E9F0F-1835-4D76-87EE-C2CA369191AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B2E9F0F-1835-4D76-87EE-C2CA369191AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

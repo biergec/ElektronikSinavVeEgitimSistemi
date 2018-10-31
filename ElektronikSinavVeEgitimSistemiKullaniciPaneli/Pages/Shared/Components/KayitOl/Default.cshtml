@@ -1,0 +1,144 @@
+﻿@model EntityLayer.Login.KayitOlViewModel
+
+<div class="modal" tabindex="-1" role="dialog" id="modalKayitOl">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Kayit Ol</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card card-nav-tabs card-plain nav-pills">
+                    <div class="card-header card-header-danger">
+                        <div class="nav-tabs-navigation">
+                            <div class="nav-tabs-wrapper">
+                                <ul class="nav nav-tabs" data-tabs="tabs">
+                                    <li class="nav-item">
+                                        <a class="nav-link">Üyelik Türünü Seçiniz :</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#ogrenci" onclick="UyelikTuruDegistir('ogrenci')" data-toggle="tab">Öğrenci</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#egitmen" onclick="UyelikTuruDegistir('egitmen')" data-toggle="tab">Eğitmen</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content text-center">
+                            <div class="tab-pane active" id="ogrenci">
+                                <form id="formKayitOl">
+
+                                    <input id="hiddenKayitUyelikTipi" asp-for="UyelikTuru" type="hidden" value="ogrenci" />
+
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Ad</label>
+                                        <input asp-for="Ad" id="oAd" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Soyad</label>
+                                        <input asp-for="Soyad" id="oSoyad" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Soyad</label>
+                                        <input asp-for="Email" id="oEmail" class="form-control" type="email" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Eğitim Gördüğünüz Kurum Adı</label>
+                                        <input asp-for="EgitimGorduguKurumAdi" id="oEgitimGorduguKurumAdi" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Bölümünüz</label>
+                                        <input asp-for="EgitimGorduguKurumBolum" id="oEgitimGorduguKurumBolum" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Kurum Öğrenci Numaranız</label>
+                                        <input asp-for="KurumOgrenciNumarasi" id="oKurumOgrenciNumarasi" type="number" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Şifreniz</label>
+                                        <input asp-for="Password" id="oPassword" class="form-control" type="password" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Şifrenizi Tekrar Giriniz</label>
+                                        <input asp-for="ConfirmPassword" id="oConfirmPassword" class="form-control" type="password" />
+                                    </div>
+
+                                    <input type="submit" value="@Model" />
+                                    @Html.AntiForgeryToken()
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="egitmen">
+                                <p> I will be the leader of a company that ends up being worth billions of dollars, because I got the answers. I understand culture. I am the nucleus. I think that&#x2019;s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at. I think that&#x2019;s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at. </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="KayitOl()">Kayıt Ol</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function UyelikTuruDegistir(uyelikTuru) {
+        $('#hiddenKayitUyelikTipi').value = uyelikTuru.toString();
+    }
+</script>
+<script>
+    function KayitOl() {
+        var Email = document.getElementById("oEmail").value;
+        var Password = document.getElementById("oPassword").value;
+        var ConfirmPassword = document.getElementById("oConfirmPassword").value; $('#').value;
+        var UyelikTuru = $('#hiddenKayitUyelikTipi').value;
+        var Ad = $('#oAd').value;
+        var Soyad = $('#oSoyad').value;
+        var EgitimGorduguKurumAdi = $('#oEgitimGorduguKurumAdid').value;
+        var EgitimGorduguKurumBolum = $('#oEgitimGorduguKurumBolum').value;
+        var KurumOgrenciNumarasi = $('#oKurumOgrenciNumarasi').value;
+
+        var filterByValue = {
+            Email: Email,
+            Password: Password,
+            ConfirmPassword: ConfirmPassword,
+            UyelikTuru: UyelikTuru,
+            Ad: Ad,
+            Soyad: Soyad,
+            EgitimGorduguKurumAdi: EgitimGorduguKurumAdi,
+            EgitimGorduguKurumBolum: EgitimGorduguKurumBolum,
+            KurumOgrenciNumarasi: KurumOgrenciNumarasi
+        }
+
+        $.ajax({
+            url: '/Login/KayitOl',
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            data: {
+                FilterBy: JSON.stringify(filterByValue)
+            },
+            success: function (result) {
+                if (result.isSuccess) {
+                    toastr.success(result.Message.toString());
+                } else {
+                    toastr.warning(result.Message.toString());
+                }
+            },
+            error: function () {
+                toastr.warning("İşlem gerçekleştirilemedi!");
+            }
+        });
+
+    }
+
+</script>
