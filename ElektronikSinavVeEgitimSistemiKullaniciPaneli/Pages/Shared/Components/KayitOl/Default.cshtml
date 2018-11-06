@@ -19,10 +19,10 @@
                                         <a class="nav-link">Üyelik Türünü Seçiniz :</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link active" href="#ogrenci" onclick="UyelikTuruDegistir('ogrenci')" data-toggle="tab">Öğrenci</a>
+                                        <a class="nav-link active" href="#kayitOl" onclick="UyelikTuruDegistir('ogrenci')" data-toggle="tab">Öğrenci</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#egitmen" onclick="UyelikTuruDegistir('egitmen')" data-toggle="tab">Eğitmen</a>
+                                        <a class="nav-link" href="#kayitOl" onclick="UyelikTuruDegistir('egitmen')" data-toggle="tab">Eğitmen</a>
                                     </li>
                                 </ul>
                             </div>
@@ -30,50 +30,45 @@
                     </div>
                     <div class="card-body">
                         <div class="tab-content text-center">
-                            <div class="tab-pane active" id="ogrenci">
+                            <div class="tab-pane active" id="kayitOl">
                                 <form id="formKayitOl">
 
-                                    <input id="hiddenKayitUyelikTipi" asp-for="UyelikTuru" type="hidden" value="ogrenci" />
+                                    <input id="hiddenKayitUyelikTipi" type="hidden" value="ogrenci" />
 
                                     <div class="form-group">
-                                        <label class="bmd-label-floating">Ad</label>
+                                        <label for="oAd" class="bmd-label-floating texColorBlack" style="text-align: left">Ad</label>
                                         <input asp-for="Ad" id="oAd" class="form-control" />
                                     </div>
                                     <div class="form-group">
-                                        <label class="bmd-label-floating">Soyad</label>
+                                        <label for="oSoyad" class="bmd-label-floating texColorBlack">Soyad</label>
                                         <input asp-for="Soyad" id="oSoyad" class="form-control" />
                                     </div>
                                     <div class="form-group">
-                                        <label class="bmd-label-floating">Soyad</label>
+                                        <label for="oEmail" class="bmd-label-floating texColorBlack">E-Mail</label>
                                         <input asp-for="Email" id="oEmail" class="form-control" type="email" />
                                     </div>
                                     <div class="form-group">
-                                        <label class="bmd-label-floating">Eğitim Gördüğünüz Kurum Adı</label>
+                                        <label for="oEgitimGorduguKurumAdi" id="egitimGorduguKurumAdiLabel" class="bmd-label-floating texColorBlack">Eğitim Gördüğünüz Kurum Adı</label>
                                         <input asp-for="EgitimGorduguKurumAdi" id="oEgitimGorduguKurumAdi" class="form-control" />
                                     </div>
-                                    <div class="form-group">
-                                        <label class="bmd-label-floating">Bölümünüz</label>
+                                    <div class="form-group" >
+                                        <label for="oEgitimGorduguKurumBolum" id="egitimGorduguKurumBolumLabel" class="bmd-label-floating texColorBlack">Bölümünüz</label>
                                         <input asp-for="EgitimGorduguKurumBolum" id="oEgitimGorduguKurumBolum" class="form-control" />
                                     </div>
-                                    <div class="form-group">
-                                        <label class="bmd-label-floating">Kurum Öğrenci Numaranız</label>
-                                        <input asp-for="KurumOgrenciNumarasi" id="oKurumOgrenciNumarasi" type="number" class="form-control" />
+                                    <div class="form-group" id="ogrenciNumarasiFormGroup">
+                                        <label for="oKurumOgrenciNumarasi" class="bmd-label-floating texColorBlack">Kurum Öğrenci Numaranız</label>
+                                        <input asp-for="KurumOgrenciNumarasi" min="0" id="oKurumOgrenciNumarasi" type="number" class="form-control" />
                                     </div>
                                     <div class="form-group">
-                                        <label class="bmd-label-floating">Şifreniz</label>
-                                        <input asp-for="Password" id="oPassword" class="form-control" type="password" />
+                                        <label for="oPassword" class="bmd-label-floating">Şifreniz</label>
+                                        <input asp-for="Password" id="oPassword" class="form-control texColorBlack" type="password" />
                                     </div>
                                     <div class="form-group">
-                                        <label class="bmd-label-floating">Şifrenizi Tekrar Giriniz</label>
+                                        <label for="oConfirmPassword" class="bmd-label-floating texColorBlack">Şifrenizi Tekrar Giriniz</label>
                                         <input asp-for="ConfirmPassword" id="oConfirmPassword" class="form-control" type="password" />
                                     </div>
-
-                                    <input type="submit" value="@Model" />
                                     @Html.AntiForgeryToken()
                                 </form>
-                            </div>
-                            <div class="tab-pane" id="egitmen">
-                                <p> I will be the leader of a company that ends up being worth billions of dollars, because I got the answers. I understand culture. I am the nucleus. I think that&#x2019;s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at. I think that&#x2019;s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at. </p>
                             </div>
                         </div>
                     </div>
@@ -89,49 +84,69 @@
 
 <script>
     function UyelikTuruDegistir(uyelikTuru) {
-        $('#hiddenKayitUyelikTipi').value = uyelikTuru.toString();
+        $('#hiddenKayitUyelikTipi').val(uyelikTuru.toString());
+        if (uyelikTuru.toString().toLowerCase() == "egitmen") {
+            $('#egitimGorduguKurumAdiLabel').text("Kurum Adı");
+            $('#egitimGorduguKurumBolumLabel').text("Kurum Bölümü");
+            $('#ogrenciNumarasiFormGroup').hide();
+        } else {
+            $('#egitimGorduguKurumAdiLabel').text("Eğitim Gördüğünüz Kurum Adı");
+            $('#egitimGorduguKurumBolumLabel').text("Bölümünüz");
+            $('#ogrenciNumarasiFormGroup').show();
+        }
+    }
+
+    function KayitOlInputlariTemizle() {
+        $('#oAd').val("");
+        $('#oSoyad').val("");
+        $('#oEmail').val("");
+        $('#oEgitimGorduguKurumAdi').val("");
+        $('#oEgitimGorduguKurumBolum').val("");
+        $('#oKurumOgrenciNumarasi').val("");
+        $('#oPassword').val("");
+        $('#oConfirmPassword').val("");
     }
 </script>
 <script>
     function KayitOl() {
-        var Email = document.getElementById("oEmail").value;
-        var Password = document.getElementById("oPassword").value;
-        var ConfirmPassword = document.getElementById("oConfirmPassword").value; $('#').value;
-        var UyelikTuru = $('#hiddenKayitUyelikTipi').value;
-        var Ad = $('#oAd').value;
-        var Soyad = $('#oSoyad').value;
-        var EgitimGorduguKurumAdi = $('#oEgitimGorduguKurumAdid').value;
-        var EgitimGorduguKurumBolum = $('#oEgitimGorduguKurumBolum').value;
-        var KurumOgrenciNumarasi = $('#oKurumOgrenciNumarasi').value;
+        var email = $('#oEmail').val();
+        var password = $('#oPassword').val(); 
+        var confirmPassword = $('#oConfirmPassword').val();
+        var uyelikTuru = $('#hiddenKayitUyelikTipi').val();
+        var ad = $('#oAd').val();
+        var soyad = $('#oSoyad').val();
+        var egitimGorduguKurumAdi = $('#oEgitimGorduguKurumAdi').val();
+        var egitimGorduguKurumBolum = $('#oEgitimGorduguKurumBolum').val();
+        var kurumOgrenciNumarasi = $('#oKurumOgrenciNumarasi').val();
 
-        var filterByValue = {
-            Email: Email,
-            Password: Password,
-            ConfirmPassword: ConfirmPassword,
-            UyelikTuru: UyelikTuru,
-            Ad: Ad,
-            Soyad: Soyad,
-            EgitimGorduguKurumAdi: EgitimGorduguKurumAdi,
-            EgitimGorduguKurumBolum: EgitimGorduguKurumBolum,
-            KurumOgrenciNumarasi: KurumOgrenciNumarasi
+        var kayitOlViewModel = {
+            Email: email,
+            Password: password,
+            ConfirmPassword: confirmPassword,
+            UyelikTuru: uyelikTuru,
+            Ad: ad,
+            Soyad: soyad,
+            EgitimGorduguKurumAdi: egitimGorduguKurumAdi,
+            EgitimGorduguKurumBolum: egitimGorduguKurumBolum,
+            KurumOgrenciNumarasi: kurumOgrenciNumarasi
         }
 
         $.ajax({
             url: '/Login/KayitOl',
             type: 'POST',
-            contentType: 'application/json; charset=utf-8',
             headers: {
                 RequestVerificationToken:
                     $('input:hidden[name="__RequestVerificationToken"]').val()
             },
             data: {
-                FilterBy: JSON.stringify(filterByValue)
+                kayitOlViewModel: kayitOlViewModel
             },
             success: function (result) {
                 if (result.isSuccess) {
-                    toastr.success(result.Message.toString());
+                    toastr.success(result.message);
+                    KayitOlInputlariTemizle();
                 } else {
-                    toastr.warning(result.Message.toString());
+                    toastr.warning(result.message);
                 }
             },
             error: function () {
@@ -142,3 +157,4 @@
     }
 
 </script>
+

@@ -20,7 +20,7 @@
 </head>
 <body class="">
     <div class="wrapper">
-
+        @Html.AntiForgeryToken()
         <div class="sidebar" data-color="purple" data-background-color="white">
             <!--
             Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
@@ -61,8 +61,8 @@
                     <div class="collapse navbar-collapse justify-content-end">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="#pablo">
-                                    <i class="material-icons">notifications</i> Notifications
+                                <a class="nav-link" href="#" onclick="CikisYap()">
+                                    <i class="material-icons">notifications</i> Çıkış Yap
                                 </a>
                             </li>
                             <!-- your navbar here -->
@@ -99,16 +99,35 @@
         </div>
     </div>
 
-<!--   Core JS Files   -->
-    <script src="js/core/jquery.min.js"></script>
-    <script src="js/core/popper.min.js"></script>
-    <script src="js/core/bootstrap-material-design.min.js"></script>
-    
+    <!--   Core JS Files   -->
+    <script src="~/js/core/jquery.min.js"></script>
+    <script src="~/js/core/popper.min.js"></script>
+    <script src="~/js/core/bootstrap-material-design.min.js"></script>
+
     <script src="~/js/plugins/perfect-scrollbar.jquery.min.js"></script>
     <script src="~/js/plugins/bootstrap-notify.js"></script>
     <script src="~/js/material-dashboard.min.js"></script>
     <script src="~/js/toastr/toastr.min.js"></script>
     @RenderSection("Scripts", required: false)
+
+    <script>
+        function CikisYap() {
+            $.ajax({
+                url: '/Login/LogOut',
+                type: 'POST',
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                success: function () {
+                    window.location.href = "/Login/Index";
+                },
+                error: function () {
+                    toastr.warning("İşlem gerçekleştirilemedi!");
+                }
+            });
+        }
+    </script>
 
 </body>
 </html>

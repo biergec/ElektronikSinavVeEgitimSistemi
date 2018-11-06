@@ -31,7 +31,7 @@ namespace EntityLayer.Login
         [Display(Name = "Üniversite Bölüm İsmi"), Required(ErrorMessage = "{0} Bölüm İsmi Alanı Zorunludur")]
         public string EgitimGorduguKurumBolum { get; set; }
 
-        [Display(Name = "Öğrenci Numaranız"), Required(ErrorMessage = "{0} Alanı Zorunludur")]
+        [Display(Name = "Öğrenci Numaranız")]
         public string KurumOgrenciNumarasi { get; set; }
     }
 }

@@ -34,7 +34,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
 
             services.AddDbContext<EfContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SQLServerConnection"),
-                    optionsBuilder => 
+                    optionsBuilder =>
                         optionsBuilder.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
 
             services.AddIdentityCore<AppUser>(options => { });
@@ -45,7 +45,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
                     options.Password.RequireUppercase = false;
                     options.Password.RequiredLength = 6;
                     options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequiredUniqueChars = 4;
+                    options.Password.RequiredUniqueChars = 1;
                 })
                 .AddEntityFrameworkStores<EfContext>()
                 .AddDefaultTokenProviders();
@@ -58,7 +58,18 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            services.Configure<IdentityOptions>(options => { options.Password.RequiredLength = 3; });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.ExpireTimeSpan = TimeSpan.FromDays(10);
+                options.LoginPath = "/Login/Index";
+                options.SlidingExpiration = true;
+            });
         }
+
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, RoleManager<IdentityRole> roleManager)
@@ -77,6 +88,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
@@ -91,19 +103,16 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
         private static async Task EnsureRolesAsync(RoleManager<IdentityRole> roleManager)
         {
             var roleAlreadyExistAdmin = await roleManager.RoleExistsAsync(UyelikTuru.Admin.ToString());
-            if (roleAlreadyExistAdmin)
-                return;
-            await roleManager.CreateAsync(new IdentityRole(UyelikTuru.Admin.ToString()));
+            if (!roleAlreadyExistAdmin)
+                await roleManager.CreateAsync(new IdentityRole(UyelikTuru.Admin.ToString()));
 
             var roleAlreadyExistEgitmen = await roleManager.RoleExistsAsync(UyelikTuru.Egitmen.ToString());
-            if (roleAlreadyExistEgitmen)
-                return;
-            await roleManager.CreateAsync(new IdentityRole(UyelikTuru.Egitmen.ToString()));
+            if (!roleAlreadyExistEgitmen)
+                await roleManager.CreateAsync(new IdentityRole(UyelikTuru.Egitmen.ToString()));
 
             var roleAlreadyExistOgrenci = await roleManager.RoleExistsAsync(UyelikTuru.Ogrenci.ToString());
-            if (roleAlreadyExistOgrenci)
-                return;
-            await roleManager.CreateAsync(new IdentityRole(UyelikTuru.Ogrenci.ToString()));
+            if (!roleAlreadyExistOgrenci)
+                await roleManager.CreateAsync(new IdentityRole(UyelikTuru.Ogrenci.ToString()));
         }
     }
 }
