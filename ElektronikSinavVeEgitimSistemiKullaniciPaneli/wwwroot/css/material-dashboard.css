@@ -74,6 +74,10 @@ address {
   font-style: normal;
   line-height: inherit; }
 
+colorWhiteText{
+    color: white;
+}
+
 ol,
 ul,
 dl {

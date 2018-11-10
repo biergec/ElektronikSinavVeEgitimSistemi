@@ -1,0 +1,57 @@
+﻿@using EntityLayer.Sinav
+@model EntityLayer.Sinav.SinavOlusturmaSecenekleri
+
+@{
+    ViewData["Title"] = "Sınav oluşturma seçenekleri";
+}
+
+<div class="card">
+    <div class="card-body">
+        <b>Sınav Oluşturma Kriterleri</b>
+    </div>
+</div>
+
+<br />
+
+<form method="post">
+    <div class="form-group">
+        <label for="DersAdi" class="bmd-label-floating">Ders Adı</label>
+        <input type="text" class="form-control" asp-for="DersAdi" id="DersAdi">
+        <span asp-validation-for="DersAdi"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="SinavTuru" class="bmd-label-floating">Sınav Türünü Seçiniz</label>
+        <select asp-for="SinavTuru" class="form-control" id="SinavTuru" asp-items="Html.GetEnumSelectList<SinavTuru>()" onchange="SinavTuruDegisimi()"></select>
+        <span asp-validation-for="SinavTuru"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="DersKodu" class="bmd-label-floating">Ders Kodu</label>
+        <input type="text" class="form-control" asp-for="DersKodu" id="DersKodu">
+        <span asp-validation-for="DersKodu"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="SoruSikSayisi" class="bmd-label-floating">Soru Başına Şık Sayısı</label>
+        <input type="number" value="3" max="10" min="3" class="form-control" asp-for="SoruSikSayisi" id="SoruSikSayisi">
+        <span asp-validation-for="SoruSikSayisi"></span>
+    </div>
+    <br />
+
+    @Html.AntiForgeryToken()
+
+    <button type="submit" class="btn btn-primary">Soruları Hazırla</button>
+
+</form>
+
+<script>
+    function SinavTuruDegisimi() {
+        var sinavTuru = $('#SinavTuru').val();
+        if (!sinavTuru && parseInt(sinavTuru) == 1) {
+            document.getElementById("SoruSikSayisi").disabled = false;
+        } else {
+            document.getElementById("SoruSikSayisi").disabled = true;
+        }
+    }
+</script>

@@ -1,0 +1,70 @@
+﻿@model EntityLayer.Sinav.SinavOlusturmaSecenekleri
+
+@{
+    ViewData["Title"] = "Test Sinavı Oluştur";
+}
+
+<script src="~/js/My/TestSinavOlustur.js"></script>
+
+<div class="card card-nav-tabs">
+    <div class="card-header card-header-warning">
+        <b>Sınav Bilgileri</b>
+    </div>
+    <div class="card-body">
+        <a class="btn btn-info">Sınav Türü : @Model.SinavTuru</a>
+        <a class="btn btn-info">Ders Kodu : @Model.DersKodu</a>
+        <a class="btn btn-info">Ders Adı : @Model.DersAdi</a>
+        <a class="btn btn-info">Soru Şık Saysı : @Model.SoruSikSayisi</a>
+    </div>
+</div>
+
+<button type="button" onclick="YeniSoruEkle(@Model.SoruSikSayisi)" class="btn btn-primary">Soru Ekle</button>
+<button type="button" onclick="SonSoruyuSil()" class="btn btn-danger">Son Soruyu Sil</button>
+<button type="button" onclick="SinaviKayitEt(@Model.SoruSikSayisi)" class="btn btn-primary">Sınavı Kayıt Et</button>
+
+<br />
+<br />
+
+<input type="hidden" id="soruSayisi" value="1" />
+
+@*Sorular Paneli*@
+<div id="soruAlani">
+    <div class="card card-nav-tabs" id="soru1Card">
+        <div class="card-header card-header-success">
+            <div class="row">
+                <div class="col-md-1">
+                    <button class="form-control">1</button>
+                </div>
+                <div class="col-md-11">
+                    <input type="text" style="color: white" class="form-control" id="soru1" placeholder="Lütfen soru metnini giriniz">
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="number" min="1" max="@Model.SoruSikSayisi" class="form-control" id="soru1DogruCevap" placeholder="Sorunun doğru cevabının numarasını giriniz">
+                </div>
+            </div>
+            <br />
+            @for (int i = 0; i < Model.SoruSikSayisi; i++)
+            {
+                string cevapsiklariSiralama = "soru" + 1 + "cevap" + (i + 1);
+
+                <div class="row m-t-1">
+                    <div class="col-md-1">
+                        <a class="btn btn-info">@(i + 1)</a>
+                    </div>
+                    <div class="col-md-11">
+                        <input type="text" class="form-control" id="@cevapsiklariSiralama" placeholder="Lütfen bir cevap giriniz">
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+<br>
+
+
+

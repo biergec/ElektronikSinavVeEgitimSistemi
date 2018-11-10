@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -34,13 +35,23 @@
             </div>
             <div class="sidebar-wrapper">
                 <ul class="nav">
-                    <li class="nav-item active  ">
-                        <a class="nav-link" href="#0">
+
+                    <!-- your sidebar here -->
+
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">
                             <i class="material-icons">dashboard</i>
                             <p>Genel Bakış</p>
                         </a>
                     </li>
-                    <!-- your sidebar here -->
+
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/Sinav">
+                            <i class="material-icons">dashboard</i>
+                            <p>Sınav Oluştur</p>
+                        </a>
+                    </li>
+
                 </ul>
             </div>
         </div>
