@@ -68,6 +68,11 @@ function soruKontrol(soruSikSayisi) {
             }
         }
 
+        if (!SoruDogruCevapGirisKontrol(parseInt(i + 1), soruSikSayisi)) {
+            showNotification("top", "right", "warning", parseInt(i + 1) + ". Soru Cevabınız Hatalıdır !");
+            return false;
+        }
+
         if (hataSayisi > 0) {
             return false;
         }
@@ -91,6 +96,18 @@ function SonSoruyuSil() {
 }
 
 
+// soru doğru cevabı şıklardan birisi mi kontrol et! değlse hata ver
+function SoruDogruCevapGirisKontrol(suAnkiSoru, soruSikSayisi) {
+
+    var soruDogruCevap = $("#soru" + suAnkiSoru + "DogruCevap").val();
+    if (soruDogruCevap > soruSikSayisi || soruDogruCevap <= 0) {
+        return false;
+    }
+
+    return true;
+}
+
+
 function SinaviKayitEt(soruSikSayisi) {
 
     if (!soruKontrol(soruSikSayisi)) {
@@ -99,8 +116,12 @@ function SinaviKayitEt(soruSikSayisi) {
     }
 
     var soruSayisi = $("#soruSayisi").val();
+    var dersAdi = $("#dersAdi").val();
+    var dersKodu = $("#dersKodu").val();
+
     var testSinavSorulari = [];
     var soruSiklariText = [];
+    var soruTemplate = [];
 
     for (var i = 0; i < soruSayisi; i++) {
 
@@ -119,8 +140,14 @@ function SinaviKayitEt(soruSikSayisi) {
             SoruSiklari: soruSiklariText
         };
 
-        testSinavSorulari[i] = soru;
+        soruTemplate[i] = soru;
     }
+
+    testSinavSorulari = {
+        DersAdi: dersAdi,
+        DersKodu: dersKodu,
+        SoruTemplate: soruTemplate
+    };
 
 
     $.ajax({

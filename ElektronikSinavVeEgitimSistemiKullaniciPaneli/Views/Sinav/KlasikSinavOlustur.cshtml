@@ -1,0 +1,43 @@
+﻿@model EntityLayer.Sinav.SinavOlusturmaSecenekleri
+@{
+    ViewData["Title"] = "Klasik Sinav Oluştur";
+}
+
+<script src="~/js/My/KlasikSinavOlustur.js"></script>
+
+<div class="card card-nav-tabs">
+    <div class="card-header card-header-warning">
+        <b>Sınav Bilgileri</b>
+    </div>
+    <div class="card-body">
+        <a class="btn btn-info">Sınav Türü : @Model.SinavTuru</a>
+        <a class="btn btn-info">Ders Kodu : @Model.DersKodu</a>
+        <a class="btn btn-info">Ders Adı : @Model.DersAdi</a>
+    </div>
+</div>
+
+<button type="button" onclick="YeniSoruEkle()" class="btn btn-primary">Soru Ekle</button>
+<button type="button" onclick="SonSoruyuSil()" class="btn btn-danger">Son Soruyu Sil</button>
+<button type="button" onclick="SinaviKayitEt()" class="btn btn-primary">Sınavı Kayıt Et</button>
+
+<br />
+<br />
+
+<input type="hidden" id="soruSayisi" value="1" />
+<input type="hidden" id="dersAdi" value="@Model.DersAdi" />
+<input type="hidden" id="dersKodu" value="@Model.DersKodu" />
+
+
+@*Sorular Paneli*@
+<div id="soruAlani">
+    <div class="card card-nav-tabs" id="soru1Card">
+        <div class="card-header card-header-success">
+            Soru 1
+        </div>
+        <div class="card-body">
+            <br />
+            <input type="text" class="form-control" id="soru1" placeholder="Lütfen soru metnini giriniz...">
+            <br />
+        </div>
+    </div>
+</div>

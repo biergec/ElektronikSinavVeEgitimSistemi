@@ -22,7 +22,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 
 
         [HttpPost, ValidateAntiForgeryToken]
-       // [Authorize(Roles = "Admin,Egitmen")]
+        // [Authorize(Roles = "Admin,Egitmen")]
         public IActionResult Index(SinavOlusturmaSecenekleri sinavOlusturmaSecenekleri)
         {
             if (ModelState.IsValid)
@@ -30,9 +30,9 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
                 switch (sinavOlusturmaSecenekleri.SinavTuru)
                 {
                     case SinavTuru.Klasik:
-                        return RedirectToAction("KlasikSinavOlustur","Sinav", sinavOlusturmaSecenekleri);
+                        return RedirectToAction("KlasikSinavOlustur", "Sinav", sinavOlusturmaSecenekleri);
                     case SinavTuru.Test:
-                        return RedirectToAction("TestSinavOlustur","Sinav", sinavOlusturmaSecenekleri);
+                        return RedirectToAction("TestSinavOlustur", "Sinav", sinavOlusturmaSecenekleri);
                     default:
                         break;
                 }
@@ -56,7 +56,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 
         [HttpPost, ValidateAntiForgeryToken]
         // [Authorize(Roles = "Admin,Egitmen")]
-        public async Task<JsonResult> TestSinavOlustur(List<TestSinavSorulari> testSinavSorulari)
+        public async Task<JsonResult> TestSinavOlustur(TestSinavSorulari testSinavSorulari)
         {
 
             return new JsonResult(new Result { });
@@ -68,6 +68,16 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         {
 
             return View(sinavOlusturmaSecenekleri);
+        }
+
+
+        
+        [HttpPost, ValidateAntiForgeryToken]
+        // [Authorize(Roles = "Admin,Egitmen")]
+        public async Task<JsonResult> KlasikSinavOlustur(KlasikSinavSorulari klasikSinavSorulari)
+        {
+
+            return new JsonResult(new Result { });
         }
 
 

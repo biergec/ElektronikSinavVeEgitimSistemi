@@ -38,7 +38,8 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
                         optionsBuilder.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
 
             services.AddIdentityCore<AppUser>(options => { });
-            services.AddIdentity<AppUser, IdentityRole>(options =>
+
+            services.AddDefaultIdentity<AppUser>(options =>
                 {
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;
@@ -46,10 +47,10 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
                     options.Password.RequiredLength = 6;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequiredUniqueChars = 1;
+                    options.User.RequireUniqueEmail = true;
                 })
-                .AddEntityFrameworkStores<EfContext>()
-                .AddDefaultTokenProviders();
-
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<EfContext>();
 
             services.AddScoped<IKayitOl, KayitOlManager>();
             services.Configure<CookiePolicyOptions>(options =>
@@ -58,8 +59,6 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
-            services.Configure<IdentityOptions>(options => { options.Password.RequiredLength = 3; });
 
             services.ConfigureApplicationCookie(options =>
             {
