@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using EntityLayer;
 using EntityLayer.Login;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,13 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
     {
         private readonly IKayitOl _kayitOl;
         private readonly SignInManager<AppUser> _signInManager;
+        public Microsoft.AspNetCore.Identity.UserManager<AppUser> _userManager;
 
-        public LoginController(IKayitOl kayitOl, SignInManager<AppUser> signInManager)
+        public LoginController(IKayitOl kayitOl, SignInManager<AppUser> signInManager, Microsoft.AspNetCore.Identity.UserManager<AppUser> userManager)
         {
             this._kayitOl = kayitOl;
             this._signInManager = signInManager;
+            this._userManager = userManager;
         }
 
 

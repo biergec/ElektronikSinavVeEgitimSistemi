@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
 {
     [DbContext(typeof(EfContext))]
-    [Migration("20181031165839_a")]
-    partial class a
+    [Migration("20181111200647_Initialize")]
+    partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -82,6 +82,92 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("EntityLayer.Sinav.KlasikSinav", b =>
+                {
+                    b.Property<Guid>("KlasikSinavId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("SinavId");
+
+                    b.HasKey("KlasikSinavId");
+
+                    b.HasIndex("SinavId");
+
+                    b.ToTable("KlasikSinavs");
+                });
+
+            modelBuilder.Entity("EntityLayer.Sinav.KlasikSinavSorular", b =>
+                {
+                    b.Property<Guid>("KlasikSinavSorularId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid?>("KlasikSinavId");
+
+                    b.Property<Guid>("SinavId");
+
+                    b.Property<string>("SoruMetni");
+
+                    b.HasKey("KlasikSinavSorularId");
+
+                    b.HasIndex("KlasikSinavId");
+
+                    b.ToTable("KlasikSinavSorular");
+                });
+
+            modelBuilder.Entity("EntityLayer.Sinav.Sinav", b =>
+                {
+                    b.Property<Guid>("SinavId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("DersAdi");
+
+                    b.Property<double>("DersKodu");
+
+                    b.Property<Guid>("SinavSahibi");
+
+                    b.Property<int>("SinavTuru");
+
+                    b.HasKey("SinavId");
+
+                    b.ToTable("Sinavs");
+                });
+
+            modelBuilder.Entity("EntityLayer.Sinav.TestSinav", b =>
+                {
+                    b.Property<Guid>("TestSinavId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("SinavId");
+
+                    b.Property<string>("SoruMetni");
+
+                    b.HasKey("TestSinavId");
+
+                    b.HasIndex("SinavId");
+
+                    b.ToTable("TestSinavs");
+                });
+
+            modelBuilder.Entity("EntityLayer.Sinav.TestSinavSorular", b =>
+                {
+                    b.Property<Guid>("TestSinavSorularId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("SinavId");
+
+                    b.Property<string>("SoruSikMetni");
+
+                    b.Property<int>("SoruSikki");
+
+                    b.Property<Guid?>("TestSinavId");
+
+                    b.HasKey("TestSinavSorularId");
+
+                    b.HasIndex("TestSinavId");
+
+                    b.ToTable("TestSinavSorular");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -148,9 +234,11 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("ProviderKey");
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(128);
 
                     b.Property<string>("ProviderDisplayName");
 
@@ -181,15 +269,47 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(128);
 
                     b.Property<string>("Value");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("EntityLayer.Sinav.KlasikSinav", b =>
+                {
+                    b.HasOne("EntityLayer.Sinav.Sinav", "Sinavs")
+                        .WithMany("KlasikSinav")
+                        .HasForeignKey("SinavId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EntityLayer.Sinav.KlasikSinavSorular", b =>
+                {
+                    b.HasOne("EntityLayer.Sinav.KlasikSinav", "KlasikSinav")
+                        .WithMany("KlasikSinavSorulars")
+                        .HasForeignKey("KlasikSinavId");
+                });
+
+            modelBuilder.Entity("EntityLayer.Sinav.TestSinav", b =>
+                {
+                    b.HasOne("EntityLayer.Sinav.Sinav", "Sinavs")
+                        .WithMany("TestSinav")
+                        .HasForeignKey("SinavId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EntityLayer.Sinav.TestSinavSorular", b =>
+                {
+                    b.HasOne("EntityLayer.Sinav.TestSinav", "TestSinav")
+                        .WithMany("TestSinavSorulars")
+                        .HasForeignKey("TestSinavId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
 {
-    public partial class a : Migration
+    public partial class Initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -53,6 +53,21 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Sinavs",
+                columns: table => new
+                {
+                    SinavId = table.Column<Guid>(nullable: false),
+                    SinavSahibi = table.Column<Guid>(nullable: false),
+                    SinavTuru = table.Column<int>(nullable: false),
+                    DersAdi = table.Column<string>(nullable: true),
+                    DersKodu = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sinavs", x => x.SinavId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -98,8 +113,8 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(nullable: false),
-                    ProviderKey = table.Column<string>(nullable: false),
+                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(maxLength: 128, nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: false)
                 },
@@ -143,8 +158,8 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(nullable: false),
-                    LoginProvider = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
+                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
+                    Name = table.Column<string>(maxLength: 128, nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -156,6 +171,84 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "KlasikSinavs",
+                columns: table => new
+                {
+                    KlasikSinavId = table.Column<Guid>(nullable: false),
+                    SinavId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KlasikSinavs", x => x.KlasikSinavId);
+                    table.ForeignKey(
+                        name: "FK_KlasikSinavs_Sinavs_SinavId",
+                        column: x => x.SinavId,
+                        principalTable: "Sinavs",
+                        principalColumn: "SinavId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TestSinavs",
+                columns: table => new
+                {
+                    TestSinavId = table.Column<Guid>(nullable: false),
+                    SinavId = table.Column<Guid>(nullable: false),
+                    SoruMetni = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TestSinavs", x => x.TestSinavId);
+                    table.ForeignKey(
+                        name: "FK_TestSinavs_Sinavs_SinavId",
+                        column: x => x.SinavId,
+                        principalTable: "Sinavs",
+                        principalColumn: "SinavId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "KlasikSinavSorular",
+                columns: table => new
+                {
+                    KlasikSinavSorularId = table.Column<Guid>(nullable: false),
+                    SinavId = table.Column<Guid>(nullable: false),
+                    SoruMetni = table.Column<string>(nullable: true),
+                    KlasikSinavId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KlasikSinavSorular", x => x.KlasikSinavSorularId);
+                    table.ForeignKey(
+                        name: "FK_KlasikSinavSorular_KlasikSinavs_KlasikSinavId",
+                        column: x => x.KlasikSinavId,
+                        principalTable: "KlasikSinavs",
+                        principalColumn: "KlasikSinavId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TestSinavSorular",
+                columns: table => new
+                {
+                    TestSinavSorularId = table.Column<Guid>(nullable: false),
+                    SinavId = table.Column<Guid>(nullable: false),
+                    SoruSikki = table.Column<int>(nullable: false),
+                    SoruSikMetni = table.Column<string>(nullable: true),
+                    TestSinavId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TestSinavSorular", x => x.TestSinavSorularId);
+                    table.ForeignKey(
+                        name: "FK_TestSinavSorular_TestSinavs_TestSinavId",
+                        column: x => x.TestSinavId,
+                        principalTable: "TestSinavs",
+                        principalColumn: "TestSinavId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -196,6 +289,26 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_KlasikSinavs_SinavId",
+                table: "KlasikSinavs",
+                column: "SinavId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_KlasikSinavSorular_KlasikSinavId",
+                table: "KlasikSinavSorular",
+                column: "KlasikSinavId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestSinavs_SinavId",
+                table: "TestSinavs",
+                column: "SinavId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestSinavSorular_TestSinavId",
+                table: "TestSinavSorular",
+                column: "TestSinavId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -216,10 +329,25 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "KlasikSinavSorular");
+
+            migrationBuilder.DropTable(
+                name: "TestSinavSorular");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "KlasikSinavs");
+
+            migrationBuilder.DropTable(
+                name: "TestSinavs");
+
+            migrationBuilder.DropTable(
+                name: "Sinavs");
         }
     }
 }

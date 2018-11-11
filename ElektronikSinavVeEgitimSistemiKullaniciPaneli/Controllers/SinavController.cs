@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Sinav;
+using DAL.UnitOfWork;
 using EntityLayer;
 using EntityLayer.Sinav;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +15,12 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
     [Authorize]
     public class SinavController : Controller
     {
+        private readonly ISinavOlustur _sinavOlustur;
+
+        public SinavController(ISinavOlustur sinavOlustur)
+        {
+            this._sinavOlustur = sinavOlustur;
+        }
 
         public IActionResult Index()
         {
@@ -48,7 +57,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         // [Authorize(Roles = "Admin,Egitmen")]
         public IActionResult TestSinavOlustur(SinavOlusturmaSecenekleri sinavOlusturmaSecenekleri)
         {
-
+            
             return View(sinavOlusturmaSecenekleri);
         }
 
@@ -58,7 +67,6 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         // [Authorize(Roles = "Admin,Egitmen")]
         public async Task<JsonResult> TestSinavOlustur(TestSinavSorulari testSinavSorulari)
         {
-
             return new JsonResult(new Result { });
         }
 
@@ -76,7 +84,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         // [Authorize(Roles = "Admin,Egitmen")]
         public async Task<JsonResult> KlasikSinavOlustur(KlasikSinavSorulari klasikSinavSorulari)
         {
-
+            _sinavOlustur.KlasikSinavOlustur(klasikSinavSorulari, Guid.Parse(User.Identity.GetUserId()));
             return new JsonResult(new Result { });
         }
 

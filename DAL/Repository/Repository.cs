@@ -5,15 +5,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using DAL.Context;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using EntityState = Microsoft.EntityFrameworkCore.EntityState;
 
 namespace DAL.Repository
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class 
     {
-        protected readonly DbContext Context;
+        protected EfContext Context;
         protected DbSet<TEntity> Entities;
 
-        public Repository(DbContext context)
+        public Repository(EfContext context)
         {
             Context = context;
         }
@@ -32,7 +34,6 @@ namespace DAL.Repository
 
         public IEnumerable<TEntity> GetAll()
         {
-       
             return Context.Set<TEntity>().ToList();
         }
 
@@ -70,7 +71,7 @@ namespace DAL.Repository
         {
             Context.Set<TEntity>();
             Entities.Attach(entityToUpdate);  
-            Context.Entry(entityToUpdate).State = EntityState.Modified;  
+            Context.Entry(entityToUpdate).State = (EntityState) System.Data.Entity.EntityState.Modified;  
         }
     }
 }

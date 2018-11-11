@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLayer.Login;
+using BusinessLayer.Sinav;
 using DAL.Context;
+using DAL.UnitOfWork;
 using EntityLayer.Login;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -52,7 +54,11 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<EfContext>();
 
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IKayitOl, KayitOlManager>();
+            services.AddScoped<ISinavOlustur, SinavOlustur>();
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.

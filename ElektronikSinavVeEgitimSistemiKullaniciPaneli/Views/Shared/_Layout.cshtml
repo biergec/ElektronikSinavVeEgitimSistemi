@@ -45,7 +45,7 @@
                             <p>Genel Bakış</p>
                         </a>
                     </li>
-                    @if(User.HasClaim(ClaimTypes.Role, "Egitmen") || User.HasClaim(ClaimTypes.Role, "Admin"))
+                    @if(User.IsInRole("Egitmen") || User.IsInRole("Admin") )
                     {
                         <li class="nav-item active">
                             <a class="nav-link" href="/Sinav">
