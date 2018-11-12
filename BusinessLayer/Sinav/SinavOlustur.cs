@@ -48,13 +48,12 @@ namespace BusinessLayer.Sinav
 
                 UnitOfWork.SaveChanges();
 
-                _logger.LogInformation("Yeni sınav oluşturuldu, İşlem sahibi -> " + sinavSahibiIdBilgisi);
-                return new Result { IsSuccessful = true, Message = "Sınav başarılı bir şekilde kayıt edildi." };
+                return new Result { isSuccess = true, Message = "Sınav başarılı bir şekilde kayıt edildi." };
             }
             catch (Exception e)
             {
                 _logger.LogError("Sinav kayıt başarısız -> " + e.ToString() + " | İşlem sahibi -> " + sinavSahibiIdBilgisi);
-                return new Result { IsSuccessful = false, Message = "Sınav kayıt işlemi başarısız." };
+                return new Result { isSuccess = false, Message = "Sınav kayıt işlemi başarısız." };
             }
         }
 
@@ -106,17 +105,14 @@ namespace BusinessLayer.Sinav
                 UnitOfWork.SinavRepository.Add(sinavTablosu);
                 UnitOfWork.SaveChanges();
 
-                _logger.LogInformation("Test sınavı başarılı bir şekilde kayıt edildi. İşlem sahibi -> " + sinavSahibiIdBilgisi);
-                return new Result { IsSuccessful = true, Message = "Test sınavı başarılı bir şekilde kayıt edildi." };
+                return new Result { isSuccess = true, Message = "Test sınavı başarılı bir şekilde kayıt edildi." };
             }
             catch (Exception e)
             {
                 _logger.LogError("Test sınavı kayıt işlemi başarısız. Detaylar -> " + e + " | İşlem sahibi -> " + sinavSahibiIdBilgisi);
-                return new Result { IsSuccessful = false, Message = "Sınav kayıt işlemi başarısız." };
+                return new Result { isSuccess = false, Message = "Sınav kayıt işlemi başarısız." };
             }
         }
-
-
 
     }
 }

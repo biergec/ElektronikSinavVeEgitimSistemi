@@ -41,11 +41,11 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         public async Task<IActionResult> GirisYap(Login loginBilgileri)
         {
             if (!ModelState.IsValid)
-                return new JsonResult(new Result { IsSuccessful = false, Message = "Giriş bilgileri hatalı." });
+                return new JsonResult(new Result { isSuccess = false, Message = "Giriş bilgileri hatalı." });
 
             var girisResult = await _signInManager.PasswordSignInAsync(loginBilgileri.Email, loginBilgileri.Password, false, false);
 
-            return girisResult.Succeeded ? new JsonResult(new Result { IsSuccessful = true, Message = "/Home/Index"}) : new JsonResult(new Result { IsSuccessful = false, Message = "Lütfen giriş bilgilerinizi kontrol ediniz."});
+            return girisResult.Succeeded ? new JsonResult(new Result { isSuccess = true, Message = "/Home/Index"}) : new JsonResult(new Result { isSuccess = false, Message = "Lütfen giriş bilgilerinizi kontrol ediniz."});
         }
 
 
@@ -66,17 +66,17 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
                 if (ModelState.IsValid)
                 {
                     var result = await _kayitOl.KayitOl(kayitOlViewModel);
-                    return new JsonResult(new Result { IsSuccessful = result.IsSuccessful, Message = result.Message });
+                    return new JsonResult(new Result { isSuccess = result.isSuccess, Message = result.Message });
                 }
                 else
                 {
-                    return new JsonResult(new Result { IsSuccessful = false, Message = "İşlem yerine getirilemedi. Lütfen bilgilerinizi kontrol ediniz!" });
+                    return new JsonResult(new Result { isSuccess = false, Message = "İşlem yerine getirilemedi. Lütfen bilgilerinizi kontrol ediniz!" });
                 }
             }
             catch (Exception)
             {
                 // TODO LOG Kayıt işlemi yerine getirilemedi!
-                return new JsonResult(new Result { IsSuccessful = false, Message = "İşlem yerine getirilemedi. Lütfen bilgilerinizi kontrol ediniz!" });
+                return new JsonResult(new Result { isSuccess = false, Message = "İşlem yerine getirilemedi. Lütfen bilgilerinizi kontrol ediniz!" });
             }
         }
 

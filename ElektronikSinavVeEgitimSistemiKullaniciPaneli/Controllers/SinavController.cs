@@ -9,18 +9,24 @@ using EntityLayer.Sinav;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 {
+    // [Authorize(Roles = "Admin,Egitmen")]
     [Authorize]
     public class SinavController : Controller
     {
         private readonly ISinavOlustur _sinavOlustur;
+        private readonly IEgitmenSinavBilgileri _egitmenSinavBilgileri;
 
-        public SinavController(ISinavOlustur sinavOlustur)
+        public SinavController(ISinavOlustur sinavOlustur, IEgitmenSinavBilgileri egitmenSinavBilgileri)
         {
             this._sinavOlustur = sinavOlustur;
+            this._egitmenSinavBilgileri = egitmenSinavBilgileri;
         }
+
+
 
         public IActionResult Index()
         {
@@ -31,7 +37,6 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 
 
         [HttpPost, ValidateAntiForgeryToken]
-        // [Authorize(Roles = "Admin,Egitmen")]
         public IActionResult Index(SinavOlusturmaSecenekleri sinavOlusturmaSecenekleri)
         {
             if (ModelState.IsValid)
@@ -54,7 +59,6 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 
 
 
-        // [Authorize(Roles = "Admin,Egitmen")]
         public IActionResult TestSinavOlustur(SinavOlusturmaSecenekleri sinavOlusturmaSecenekleri)
         {
 
@@ -64,14 +68,13 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 
 
         [HttpPost, ValidateAntiForgeryToken]
-        // [Authorize(Roles = "Admin,Egitmen")]
         public async Task<JsonResult> TestSinavOlustur(TestSinavSorulari testSinavSorulari)
         {
             var result =
                 await Task.FromResult(_sinavOlustur.TestSinavOlustur(testSinavSorulari,
                     Guid.Parse(User.Identity.GetUserId())));
 
-            return new JsonResult(new Result { IsSuccessful = result.IsSuccessful, Message = result.Message });
+            return new JsonResult(new Result { isSuccess = result.isSuccess, Message = result.Message });
         }
 
 
@@ -85,12 +88,34 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 
 
         [HttpPost, ValidateAntiForgeryToken]
-        // [Authorize(Roles = "Admin,Egitmen")]
         public async Task<JsonResult> KlasikSinavOlustur(KlasikSinavSorulari klasikSinavSorulari)
         {
             var result = await Task.FromResult(_sinavOlustur.KlasikSinavOlustur(klasikSinavSorulari, Guid.Parse(User.Identity.GetUserId())));
 
-            return new JsonResult(new Result { IsSuccessful = result.IsSuccessful, Message = result.Message });
+            return new JsonResult(new Result { isSuccess = result.isSuccess, Message = result.Message });
+        }
+
+
+
+        // Data Sinav tablosu tipinde
+        public IActionResult Sinavlarim()
+        {
+            var sinavlarim = _egitmenSinavBilgileri.OlusturdugumSinavlar(Guid.Parse(User.Identity.GetUserId()));
+
+            return View((IEnumerable<Sinav>)sinavlarim.Data);
+        }
+
+
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<JsonResult> SinavSil(string sinavId)
+        {
+            if (sinavId == null)
+                return new JsonResult(new Result { isSuccess = false, Message = "Sınav silme işlemi başarısız!.." });
+
+            var result = await Task.FromResult(_egitmenSinavBilgileri.OlusturulanSinaviSil(Guid.Parse(sinavId), Guid.Parse(User.Identity.GetUserId())));
+
+            return new JsonResult(new Result { isSuccess = result.isSuccess, Message = result.Message });
         }
 
 

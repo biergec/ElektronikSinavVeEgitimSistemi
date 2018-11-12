@@ -45,7 +45,7 @@
                             <p>Genel Bakış</p>
                         </a>
                     </li>
-                    @if(User.IsInRole("Egitmen") || User.IsInRole("Admin") )
+                    @if (User.IsInRole("Egitmen") || User.IsInRole("Admin"))
                     {
                         <li class="nav-item active">
                             <a class="nav-link" href="/Sinav">
@@ -59,6 +59,13 @@
                         <a class="nav-link" href="/Sinav">
                             <i class="material-icons">dashboard</i>
                             <p>Sınav Oluştur</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/Sinav/Sinavlarim">
+                            <i class="material-icons">dashboard</i>
+                            <p>Sınavlarım</p>
                         </a>
                     </li>
 

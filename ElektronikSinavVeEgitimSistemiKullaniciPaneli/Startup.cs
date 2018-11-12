@@ -69,6 +69,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IKayitOl, KayitOlManager>();
             services.AddScoped<ISinavOlustur, SinavOlustur>();
+            services.AddScoped<IEgitmenSinavBilgileri, EgitmenSinavBilgileri>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -83,6 +84,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
                 options.LoginPath = "/Login/Index";
                 options.SlidingExpiration = true;
             });
+
         }
 
 

@@ -6,7 +6,6 @@ using DAL.Repository;
 using EntityLayer.Sinav;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using DbContext = System.Data.Entity.DbContext;
 
 namespace DAL.UnitOfWork
 {

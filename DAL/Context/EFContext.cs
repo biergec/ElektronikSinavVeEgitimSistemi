@@ -26,23 +26,23 @@ namespace DAL.Context
 
             builder.Entity<Sinav>()
                 .HasOne(c => c.TestSinav)
-                .WithOne(c => c.Sinavs).HasForeignKey<TestSinav>(x=>x.SinavId);
+                .WithOne(c => c.Sinavs).HasForeignKey<TestSinav>(x=>x.SinavId).OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Sinav>()
                 .HasOne(c => c.KlasikSinav)
-                .WithOne(c => c.Sinavs).HasForeignKey<KlasikSinav>(x=>x.SinavId);
+                .WithOne(c => c.Sinavs).HasForeignKey<KlasikSinav>(x=>x.SinavId).OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<KlasikSinav>()
                 .HasMany(c => c.KlasikSinavSorulars)
-                .WithOne(e => e.KlasikSinav).HasForeignKey(x=>x.KlasikSinavId);
+                .WithOne(e => e.KlasikSinav).HasForeignKey(x=>x.KlasikSinavId).OnDelete(DeleteBehavior.Cascade);
 
              builder.Entity<TestSinav>()
                 .HasMany(c => c.TestSinavSorulars)
-                .WithOne(e => e.TestSinav).HasForeignKey(x=>x.TestSinavId);
+                .WithOne(e => e.TestSinav).HasForeignKey(x=>x.TestSinavId).OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<TestSinavSorular>()
                 .HasMany(c => c.TestSinavSoruSiklari)
-                .WithOne(c => c.TestSinavSorular).HasForeignKey(c=>c.TestSinavSorularId);
+                .WithOne(c => c.TestSinavSorular).HasForeignKey(c=>c.TestSinavSorularId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

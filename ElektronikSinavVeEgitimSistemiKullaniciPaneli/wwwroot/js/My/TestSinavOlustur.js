@@ -162,8 +162,13 @@ function SinaviKayitEt(soruSikSayisi) {
         },
         success: function (result) {
             if (result.isSuccess) {
-                // İşlem başarılı ise sınavlarım menüsüne yönlendirsin!
-                window.location.href = result.message;
+                showNotification("top", "right", "success", "Sınav oluşturma başarılı. Sınavlarım menüsüne yönlendiriliyorsunuz. Lütfen bekleyin...");
+
+                setTimeout(function() {
+                    // İşlem başarılı ise sınavlarım menüsüne yönlendirsin!
+                    window.location.href = "/Sinav/Sinavlarim";
+                }, 3000);
+
             } else {
                 showNotification("top", "right", "warning", result.message);
             }
