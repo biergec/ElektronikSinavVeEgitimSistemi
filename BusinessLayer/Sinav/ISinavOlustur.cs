@@ -9,6 +9,6 @@ namespace BusinessLayer.Sinav
     public interface ISinavOlustur
     {
         Result KlasikSinavOlustur(KlasikSinavSorulari klasikSinavSorulari, Guid sinavSahibiIdBilgisi);
-        Result TestSinavOlustur(TestSinavSorulari testSinavSorulari);
+        Result TestSinavOlustur(TestSinavSorulari testSinavSorulari, Guid sinavSahibiIdBilgisi);
     }
 }

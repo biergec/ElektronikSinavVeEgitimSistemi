@@ -39,6 +39,10 @@ namespace DAL.Context
              builder.Entity<TestSinav>()
                 .HasMany(c => c.TestSinavSorulars)
                 .WithOne(e => e.TestSinav).HasForeignKey(x=>x.TestSinavId);
+
+            builder.Entity<TestSinavSorular>()
+                .HasMany(c => c.TestSinavSoruSiklari)
+                .WithOne(c => c.TestSinavSorular).HasForeignKey(c=>c.TestSinavSorularId);
         }
     }
 }

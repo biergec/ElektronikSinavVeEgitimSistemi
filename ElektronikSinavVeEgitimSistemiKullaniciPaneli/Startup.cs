@@ -17,6 +17,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Sinks.Elasticsearch;
 
 namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
 {
@@ -32,6 +35,14 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Serilog ve serilog'un storage olarak elasticsearch'ü kullanacağını belirtiyoruz
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(Configuration["ElasticConfiguration:Uri"]))
+                {
+                    AutoRegisterTemplate = true,
+                }).CreateLogger();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<EfContext>(options =>
@@ -77,7 +88,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, RoleManager<IdentityRole> roleManager, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -89,6 +100,9 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            // Serilog'u LoggerFactory'e ekleyip uygulamanın serilog üzerinden logging yapacağını belirtiyoruz
+            loggerFactory.AddSerilog();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

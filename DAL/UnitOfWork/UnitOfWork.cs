@@ -12,7 +12,7 @@ namespace DAL.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private EfContext _context { get; }
+        private EfContext Context { get; }
         private IRepository<Sinav> _sinavRepository;
         private IRepository<TestSinav> _testSinavRepository;
         private IRepository<TestSinavSorular> _testSinavSorularRepository;
@@ -21,14 +21,14 @@ namespace DAL.UnitOfWork
 
         public UnitOfWork(EfContext context)
         {
-            this._context = context;
+            this.Context = context;
         }
 
         public IRepository<Sinav> SinavRepository
         {
             get
             {
-                return _sinavRepository = _sinavRepository ?? new Repository<Sinav>(_context);
+                return _sinavRepository = _sinavRepository ?? new Repository<Sinav>(Context);
             }
         }
 
@@ -36,7 +36,7 @@ namespace DAL.UnitOfWork
         {
             get
             {
-                return _testSinavRepository = _testSinavRepository ?? new Repository<TestSinav>(_context);
+                return _testSinavRepository = _testSinavRepository ?? new Repository<TestSinav>(Context);
             }
         }
 
@@ -44,7 +44,7 @@ namespace DAL.UnitOfWork
         {
             get
             {
-                return _testSinavSorularRepository = _testSinavSorularRepository ?? new Repository<TestSinavSorular>(_context);
+                return _testSinavSorularRepository = _testSinavSorularRepository ?? new Repository<TestSinavSorular>(Context);
             }
         }
 
@@ -52,7 +52,7 @@ namespace DAL.UnitOfWork
         {
             get
             {
-                return _klasikSinavRepository = _klasikSinavRepository ?? new Repository<KlasikSinav>(_context);
+                return _klasikSinavRepository = _klasikSinavRepository ?? new Repository<KlasikSinav>(Context);
             }
         }
 
@@ -60,13 +60,13 @@ namespace DAL.UnitOfWork
         {
             get
             {
-                return _klasikSinavSorularRepository = _klasikSinavSorularRepository ?? new Repository<KlasikSinavSorular>(_context);
+                return _klasikSinavSorularRepository = _klasikSinavSorularRepository ?? new Repository<KlasikSinavSorular>(Context);
             }
         }
 
-        public void Save()
+        public void SaveChanges()
         {
-            _context.SaveChanges();
+            Context.SaveChanges();
         }
 
     }

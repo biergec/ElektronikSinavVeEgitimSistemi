@@ -57,7 +57,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         // [Authorize(Roles = "Admin,Egitmen")]
         public IActionResult TestSinavOlustur(SinavOlusturmaSecenekleri sinavOlusturmaSecenekleri)
         {
-            
+
             return View(sinavOlusturmaSecenekleri);
         }
 
@@ -67,7 +67,11 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         // [Authorize(Roles = "Admin,Egitmen")]
         public async Task<JsonResult> TestSinavOlustur(TestSinavSorulari testSinavSorulari)
         {
-            return new JsonResult(new Result { });
+            var result =
+                await Task.FromResult(_sinavOlustur.TestSinavOlustur(testSinavSorulari,
+                    Guid.Parse(User.Identity.GetUserId())));
+
+            return new JsonResult(new Result { IsSuccessful = result.IsSuccessful, Message = result.Message });
         }
 
 
@@ -79,13 +83,14 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
-        
+
         [HttpPost, ValidateAntiForgeryToken]
         // [Authorize(Roles = "Admin,Egitmen")]
         public async Task<JsonResult> KlasikSinavOlustur(KlasikSinavSorulari klasikSinavSorulari)
         {
-            _sinavOlustur.KlasikSinavOlustur(klasikSinavSorulari, Guid.Parse(User.Identity.GetUserId()));
-            return new JsonResult(new Result { });
+            var result = await Task.FromResult(_sinavOlustur.KlasikSinavOlustur(klasikSinavSorulari, Guid.Parse(User.Identity.GetUserId())));
+
+            return new JsonResult(new Result { IsSuccessful = result.IsSuccessful, Message = result.Message });
         }
 
 

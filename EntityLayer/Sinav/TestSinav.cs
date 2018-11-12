@@ -10,7 +10,6 @@ namespace EntityLayer.Sinav
         [Key]
         public Guid TestSinavId { get; set; }
         public Guid SinavId { get; set; }
-        public string SoruMetni { get; set; }
 
         public ICollection<TestSinavSorular> TestSinavSorulars { get; set; }
         public Sinav Sinavs { get; set; }

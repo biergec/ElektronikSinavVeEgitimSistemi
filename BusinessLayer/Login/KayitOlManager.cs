@@ -23,7 +23,7 @@ namespace BusinessLayer.Login
             var user = await _userManager.FindByEmailAsync(kayitOlViewModel.Email);
             if (user != null)
             {
-                return new Result { isSuccess = false, Message = "Kayıt olmak istediğiniz E-Mail adresi daha önce kullanulmıştır." };
+                return new Result { IsSuccessful = false, Message = "Kayıt olmak istediğiniz E-Mail adresi daha önce kullanulmıştır." };
             }
 
             user = new AppUser
@@ -40,17 +40,17 @@ namespace BusinessLayer.Login
             var identityResultKayit = await _userManager.CreateAsync(user, kayitOlViewModel.Password);
             if (identityResultKayit.Errors != null)
             {
-                return new Result { isSuccess = false, Message = identityResultKayit.Errors.First().Description };
+                return new Result { IsSuccessful = false, Message = identityResultKayit.Errors.First().Description };
             }
 
             var identityResultAddRole = await _userManager.AddToRoleAsync(user, kayitOlViewModel.UyelikTuru.ToString());
 
             if (identityResultAddRole.Succeeded && identityResultKayit.Succeeded)
             {
-                return new Result { isSuccess = true, Message = "Kullanıcı kaydı başarılı" };
+                return new Result { IsSuccessful = true, Message = "Kullanıcı kaydı başarılı" };
             }
 
-            return new Result { isSuccess = false, Message = "Kullanıcı kaydı başarısız oldu. Lütfen daha sonra tekrar deneyiniz." };
+            return new Result { IsSuccessful = false, Message = "Kullanıcı kaydı başarısız oldu. Lütfen daha sonra tekrar deneyiniz." };
         }
 
     }

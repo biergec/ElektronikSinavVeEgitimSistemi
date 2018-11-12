@@ -13,8 +13,9 @@ namespace DAL.Repository
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = "");
 
-        TEntity Get(int id);  
+        TEntity Get(object id);  
         IEnumerable<TEntity> GetAll();  
+        IQueryable<TEntity> GetAllNoTracking();  
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);  
         TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate);  
 
@@ -24,6 +25,9 @@ namespace DAL.Repository
         void Remove(TEntity entity);
         void RemoveRange(IEnumerable<TEntity> entities);
 
-        void UpdateEntity(TEntity entityToUpdate);  
+        void Update(TEntity entity);
+        void Update(IEnumerable<TEntity> entities);
+
+        IQueryable<TEntity> IncludeMany(params Expression<Func<TEntity, object>>[] includes);
     }
 }

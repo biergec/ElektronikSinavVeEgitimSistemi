@@ -16,6 +16,6 @@ namespace DAL.UnitOfWork
         IRepository<KlasikSinav> KlasikSinavRepository { get; }
         IRepository<KlasikSinavSorular> KlasikSinavSorularRepository { get; }
 
-        void Save();
+        void SaveChanges();
     }
 }
