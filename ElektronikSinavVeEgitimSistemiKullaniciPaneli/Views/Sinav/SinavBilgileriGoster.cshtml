@@ -1,0 +1,68 @@
+﻿@model List<EntityLayer.Sinav.SinavSorulariGoruntuleme>
+
+@{
+    ViewData["Title"] = "Sinav Bilgileri";
+}
+
+@if (Model[0].TestSinavSorular != null)
+{
+    <div class="card card-nav-tabs">
+        <div class="card-header card-header-warning">
+            <b>@Model[0].TestSinavSorular[0].TestSinav.Sinavs.DersAdi Sınav Soruları</b>
+        </div>
+        <div class="card-body">
+        </div>
+    </div>
+
+    <br />
+
+    var soruNumarasi = 1;
+    foreach (var itemSinav in Model[0].TestSinavSorular)
+    {
+        <div class="card card-nav-tabs">
+            <div class="card-header card-header-success">
+                Soru @(soruNumarasi) | @itemSinav.TestSinavSorusuMetni
+            </div>
+            <div class="card-body">
+
+                @foreach (var item in itemSinav.TestSinavSoruSiklari)
+                {
+                    <div class="row m-t-1">
+                        <div class="col-md-1">
+                            <a class="btn btn-info">@item.SoruSikki</a>
+                        </div>
+                        <div class="col-md-11">
+                            <a class="btn col-md-12" style="text-align: left;color: white">@item.SoruSikMetni</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <br />
+
+        {
+            soruNumarasi++;
+        }
+    }
+}
+else
+{
+    //Klasik sorular
+    <div class="card card-nav-tabs">
+        <div class="card-header card-header-danger">
+            <b> @Model[0].KlasikSinav[0].Sinavs.DersAdi - Sınav Soruları</b>
+        </div>
+        <div class="card-body">
+
+        </div>
+    </div>
+    foreach (var item2 in Model[0].KlasikSinav[0].KlasikSinavSorulars)
+    {
+        <div class="card card-nav-tabs">
+            <div class="card-body">
+                @item2.SoruMetni
+            </div>
+        </div>
+    }
+
+}

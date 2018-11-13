@@ -38,7 +38,6 @@
     return;
 }
 
-
 function showNotification(from = "top", align = "right", type = "success", message) {
     $.notify({
         icon: "add_alert",

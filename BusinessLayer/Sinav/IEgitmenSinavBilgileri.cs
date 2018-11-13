@@ -9,5 +9,6 @@ namespace BusinessLayer.Sinav
     {
         Result OlusturdugumSinavlar(Guid sinavSahibiGuidId);
         Result OlusturulanSinaviSil(Guid sinavId, Guid sinavSahibiGuidId);
+        Result SinavSoruBilgileri(Guid sinavId);
     }
 }

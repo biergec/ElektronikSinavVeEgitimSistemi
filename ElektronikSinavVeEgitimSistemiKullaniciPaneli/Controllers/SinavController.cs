@@ -119,6 +119,18 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
+        // Datayı her zaman object doner on taraft tipini kontrol et parse et
+        [HttpGet]
+        public IActionResult SinavBilgileriGoster(string sinavId)
+        {
+            if (sinavId == null)
+                return BadRequest();
+
+            var result = _egitmenSinavBilgileri.SinavSoruBilgileri(Guid.Parse(sinavId));
+
+            return View((List<SinavSorulariGoruntuleme>)result.Data);
+        }
+
 
     }
 }

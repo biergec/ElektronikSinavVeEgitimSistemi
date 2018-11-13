@@ -8,17 +8,11 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.ViewComponents
 {
     public class KayitOlViewComponent : ViewComponent
     {
-        private readonly IKayitOl _kayitOl;
-
-        public KayitOlViewComponent(IKayitOl kayitOl)
-        {
-            this._kayitOl = kayitOl;
-        }
+        public KayitOlViewComponent() { }
 
         public IViewComponentResult Invoke()
         {
             return View();
         }
-
     }
 }
