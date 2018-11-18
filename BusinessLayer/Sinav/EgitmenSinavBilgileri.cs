@@ -26,9 +26,9 @@ namespace BusinessLayer.Sinav
         {
             try
             {
-                var sinavBilgileri = _unitOfWork.SinavRepository.GetAll().OrderBy(x => x.SinavEklenmeTarihi);
+                var sinavlar = _unitOfWork.SinavRepository.IncludeMany(x=>x.Dersler).Where(x=>x.SinavSahibi == sinavSahibiGuidId).OrderBy(x=>x.SinavEklenmeTarihi);
 
-                return new Result { isSuccess = true, Data = sinavBilgileri };
+                return new Result { isSuccess = true, Data = sinavlar };
             }
             catch (Exception e)
             {
@@ -68,6 +68,11 @@ namespace BusinessLayer.Sinav
 
                 var sinavSoruBilgileri = new List<SinavSorulariGoruntuleme>();
                 sinavSoruBilgileri.Add(new SinavSorulariGoruntuleme());
+
+                // Ders adını ayrı sorgu olarak buluyoruz
+                sinavSoruBilgileri[0].DersAdi = _unitOfWork.DerslerRepository.SingleOrDefault(x=>x.DerslerId == sinavTuru.DerslerId).DersAdi;
+
+                // Sınav türüne göre soruları çekiyoruz
                 switch (sinavTuru.SinavTuru)
                 {
                     case SinavTuru.Test:
@@ -77,7 +82,6 @@ namespace BusinessLayer.Sinav
 
                         sinavSoruBilgileri[0].TestSinavSorular =
                             sinavSoruBilgileri[0].TestSinavSorular.Where(x => x.TestSinav.SinavId == sinavId).ToList();
-
                         break;
                     case SinavTuru.Klasik:
                         sinavSoruBilgileri[0].KlasikSinav = _unitOfWork.KlasikSinavRepository.IncludeMany(x => x.Sinavs, sinav => sinav.KlasikSinavSorulars).ToList();

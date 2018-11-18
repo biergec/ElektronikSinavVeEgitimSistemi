@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.DersIslemleri;
 using BusinessLayer.Sinav;
 using DAL.UnitOfWork;
 using EntityLayer;
 using EntityLayer.Sinav;
+using EntityLayer.Sinav;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 {
@@ -19,21 +23,37 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
     {
         private readonly ISinavOlustur _sinavOlustur;
         private readonly IEgitmenSinavBilgileri _egitmenSinavBilgileri;
+        private readonly IDersIslemleri _dersIslemleri;
 
-        public SinavController(ISinavOlustur sinavOlustur, IEgitmenSinavBilgileri egitmenSinavBilgileri)
+        public SinavController(ISinavOlustur sinavOlustur, IEgitmenSinavBilgileri egitmenSinavBilgileri, IDersIslemleri dersIslemleri)
         {
             this._sinavOlustur = sinavOlustur;
             this._egitmenSinavBilgileri = egitmenSinavBilgileri;
+            this._dersIslemleri = dersIslemleri;
         }
-
 
 
         public IActionResult Index()
         {
+            var dersListesi = _dersIslemleri.GetAllDersler();
+            ViewBag.DersListesi = DersListesiTurDonusumu((IEnumerable<DersViewModel>)dersListesi.Data);
 
             return View();
         }
 
+
+        // ders listesini List<SelectListItem> tipine çeviriyouz
+        private List<SelectListItem> DersListesiTurDonusumu(IEnumerable<DersViewModel> dersList)
+        {
+            List<SelectListItem> dersListTurDonusumu = new List<SelectListItem>();
+
+            foreach (var itemDersler in dersList)
+            {
+                dersListTurDonusumu.Add(new SelectListItem { Value = itemDersler.DerslerId.ToString(), Text = itemDersler.DersAdi });
+            }
+
+            return dersListTurDonusumu;
+        }
 
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -51,16 +71,86 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
                         break;
                 }
 
+                var dersListesi = _dersIslemleri.GetAllDersler();
+                ViewBag.DersListesi = DersListesiTurDonusumu((IEnumerable<DersViewModel>)dersListesi.Data);
+
                 return View();
             }
             else
+            {
+                var dersListesi = _dersIslemleri.GetAllDersler();
+                ViewBag.DersListesi = DersListesiTurDonusumu((IEnumerable<DersViewModel>)dersListesi.Data);
+
                 return View();
+            }
         }
+
+
+
+        public IActionResult Dersler()
+        {
+            return View();
+        }
+
+
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<JsonResult> DersEkle(DersEkleViewModel dersEkleViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var sonuc = await Task.FromResult(_dersIslemleri.DersEkle(dersEkleViewModel));
+
+                return new JsonResult(new Result { isSuccess = sonuc.isSuccess, Message = sonuc.Message });
+            }
+            else
+            {
+                return new JsonResult(new Result { isSuccess = false, Message = "Girdiğiniz veriler hatalıdır!" });
+            }
+        }
+
+
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<JsonResult> DersSil(string dersId)
+        {
+            if (ModelState.IsValid)
+            {
+                var sonuc = await Task.FromResult(_dersIslemleri.DersSil(Guid.Parse(dersId)));
+
+                return new JsonResult(new Result { isSuccess = sonuc.isSuccess, Message = sonuc.Message });
+            }
+            else
+            {
+                return new JsonResult(new Result { isSuccess = false, Message = "İşlem yerine getirilemedi" });
+            }
+        }
+
+
+
+        public async Task<JsonResult> DersListesiGuncelle()
+        {
+            try
+            {
+                var sonuc = await Task.FromResult(_dersIslemleri.GetAllDersler());
+
+                var jsonConvertData = JsonConvert.SerializeObject(sonuc.Data);
+
+                return new JsonResult(new Result { isSuccess = sonuc.isSuccess, Message = "Ders Listesi Güncellendi.", Data = jsonConvertData });
+            }
+            catch (Exception)
+            {
+                return new JsonResult(new Result { isSuccess = false, Message = "Ders Listesi Güncelleme Hatası." });
+            }
+        }
+
 
 
 
         public IActionResult TestSinavOlustur(SinavOlusturmaSecenekleri sinavOlusturmaSecenekleri)
         {
+
+            ViewBag.DersAdi = _dersIslemleri.GetDersAdi(Guid.Parse(sinavOlusturmaSecenekleri.DersGuidId));
 
             return View(sinavOlusturmaSecenekleri);
         }
@@ -81,6 +171,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 
         public IActionResult KlasikSinavOlustur(SinavOlusturmaSecenekleri sinavOlusturmaSecenekleri)
         {
+            ViewBag.DersAdi = _dersIslemleri.GetDersAdi(Guid.Parse(sinavOlusturmaSecenekleri.DersGuidId));
 
             return View(sinavOlusturmaSecenekleri);
         }

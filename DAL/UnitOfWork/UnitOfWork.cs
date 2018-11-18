@@ -4,6 +4,7 @@ using System.Text;
 using DAL.Context;
 using DAL.Repository;
 using EntityLayer.Sinav;
+using EntityLayer.Sinav;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,7 @@ namespace DAL.UnitOfWork
         private IRepository<TestSinavSorular> _testSinavSorularRepository;
         private IRepository<KlasikSinav> _klasikSinavRepository;
         private IRepository<KlasikSinavSorular> _klasikSinavSorularRepository;
+        private IRepository<Dersler> _derslerRepository;
 
         public UnitOfWork(EfContext context)
         {
@@ -62,6 +64,15 @@ namespace DAL.UnitOfWork
                 return _klasikSinavSorularRepository = _klasikSinavSorularRepository ?? new Repository<KlasikSinavSorular>(Context);
             }
         }
+
+        public IRepository<Dersler> DerslerRepository
+        {
+            get
+            {
+                return _derslerRepository = _derslerRepository ?? new Repository<Dersler>(Context);
+            }
+        }
+
 
         public void SaveChanges()
         {

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
 {
     [DbContext(typeof(EfContext))]
-    [Migration("20181112150712_initialize2")]
-    partial class initialize2
+    [Migration("20181116222227_firsx")]
+    partial class firsx
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -82,6 +82,22 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("EntityLayer.Sinav.Dersler", b =>
+                {
+                    b.Property<Guid>("DerslerId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("DersAdi");
+
+                    b.Property<DateTime>("DersEklenmeTarihi");
+
+                    b.Property<double>("DersKodu");
+
+                    b.HasKey("DerslerId");
+
+                    b.ToTable("Dersler");
+                });
+
             modelBuilder.Entity("EntityLayer.Sinav.KlasikSinav", b =>
                 {
                     b.Property<Guid>("KlasikSinavId")
@@ -118,9 +134,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
                     b.Property<Guid>("SinavId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("DersAdi");
-
-                    b.Property<double>("DersKodu");
+                    b.Property<Guid>("DerslerId");
 
                     b.Property<DateTime>("SinavEklenmeTarihi");
 
@@ -129,6 +143,8 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
                     b.Property<int>("SinavTuru");
 
                     b.HasKey("SinavId");
+
+                    b.HasIndex("DerslerId");
 
                     b.ToTable("Sinavs");
                 });
@@ -311,6 +327,14 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
                     b.HasOne("EntityLayer.Sinav.KlasikSinav", "KlasikSinav")
                         .WithMany("KlasikSinavSorulars")
                         .HasForeignKey("KlasikSinavId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EntityLayer.Sinav.Sinav", b =>
+                {
+                    b.HasOne("EntityLayer.Sinav.Dersler", "Dersler")
+                        .WithMany()
+                        .HasForeignKey("DerslerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

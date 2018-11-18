@@ -35,15 +35,21 @@ else
             <div class="card card-nav-tabs" id="soru1Card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-9">
+                        <div class="col-md-11">
                             <button type="button" class="btn btn-default">Sınav Türü : @item.SinavTuru</button>
-                            <button type="button" class="btn btn-default">Ders Kodu : @item.DersKodu</button>
-                            <button type="button" class="btn btn-default">Ders Adı : @item.DersAdi</button>
+                            <button type="button" class="btn btn-default">Ders : @item.Dersler.DersAdi</button>
                             <button type="button" class="btn btn-default">Eklenme Tarihi : @item.SinavEklenmeTarihi.ToShortDateString()</button>
                         </div>
-                        <div class="col-md-3">
-                            <a asp-action="SinavBilgileriGoster" asp-route-sinavId="@item.SinavId.ToString()" class="btn btn-danger"><i class="material-icons"> info </i></a>
-                            <button type="button" onclick="SinaviSil('@item.SinavId')" class="btn btn-danger"><i class="material-icons"> delete_forever </i></button>
+                        <div class="col-md-1">
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-warning dropdown-toggle" id="dropdownDetails" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true"></button>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownDetails">
+                                    <a asp-action="SinavBilgileriGoster" asp-route-sinavId="@item.SinavId.ToString()" class="dropdown-item"><i class="material-icons"> info </i> &nbsp; Soruları Önizle</a>
+                                    <a href="#" onclick="SinaviSil('@item.SinavId')" class="dropdown-item"><i class="material-icons"> delete_forever</i>&nbsp;Sınavı Sil</a>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>

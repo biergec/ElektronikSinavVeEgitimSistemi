@@ -11,8 +11,7 @@
     </div>
     <div class="card-body">
         <a class="btn btn-info">Sınav Türü : @Model.SinavTuru</a>
-        <a class="btn btn-info">Ders Kodu : @Model.DersKodu</a>
-        <a class="btn btn-info">Ders Adı : @Model.DersAdi</a>
+        <a class="btn btn-info">Ders Adı : @ViewBag.DersAdi</a>
     </div>
 </div>
 
@@ -24,9 +23,7 @@
 <br />
 
 <input type="hidden" id="soruSayisi" value="1" />
-<input type="hidden" id="dersAdi" value="@Model.DersAdi" />
-<input type="hidden" id="dersKodu" value="@Model.DersKodu" />
-
+<input type="hidden" id="dersKodu" value="@Model.DersGuidId" />
 
 @*Sorular Paneli*@
 <div id="soruAlani">

@@ -116,7 +116,6 @@ function SinaviKayitEt(soruSikSayisi) {
     }
 
     var soruSayisi = $("#soruSayisi").val();
-    var dersAdi = $("#dersAdi").val();
     var dersKodu = $("#dersKodu").val();
 
     var testSinavSorulari = [];
@@ -144,8 +143,7 @@ function SinaviKayitEt(soruSikSayisi) {
     }
 
     testSinavSorulari = {
-        DersAdi: dersAdi,
-        DersKodu: dersKodu,
+        DersGuidId: dersKodu,
         SoruTemplate: soruTemplate
     };
 

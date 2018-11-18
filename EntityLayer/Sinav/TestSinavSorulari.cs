@@ -6,8 +6,7 @@ namespace EntityLayer.Sinav
 {
     public class TestSinavSorulari
     {
-        public string DersAdi { get; set; }
-        public double DersKodu { get; set; }
+        public string DersGuidId { get; set; }
 
         public List<SoruTemplate> SoruTemplate { get; set; }
     }

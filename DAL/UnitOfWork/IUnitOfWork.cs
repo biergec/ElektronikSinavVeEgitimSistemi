@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DAL.Repository;
 using EntityLayer.Sinav;
+using EntityLayer.Sinav;
 
 namespace DAL.UnitOfWork
 {
@@ -15,6 +16,8 @@ namespace DAL.UnitOfWork
 
         IRepository<KlasikSinav> KlasikSinavRepository { get; }
         IRepository<KlasikSinavSorular> KlasikSinavSorularRepository { get; }
+
+        IRepository<Dersler> DerslerRepository { get; }
 
         void SaveChanges();
     }

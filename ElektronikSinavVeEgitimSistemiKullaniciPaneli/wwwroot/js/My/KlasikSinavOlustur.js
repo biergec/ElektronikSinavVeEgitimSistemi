@@ -62,7 +62,6 @@ function SinaviKayitEt(soruSikSayisi) {
     }
 
     var soruSayisi = $("#soruSayisi").val();
-    var dersAdi = $("#dersAdi").val();
     var dersKodu = $("#dersKodu").val();
     var sorular = [];
     var klasikSinavSorulari = [];
@@ -71,11 +70,10 @@ function SinaviKayitEt(soruSikSayisi) {
         var soruText = $("#soru" + (i + 1)).val();
         sorular[i] = soruText;
     }
-
+    
     klasikSinavSorulari = {
         Sorular: sorular,
-        DersAdi: dersAdi,
-        DersKodu: dersKodu
+        DersGuidId: dersKodu
     };
 
     $.ajax({

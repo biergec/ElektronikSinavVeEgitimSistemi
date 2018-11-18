@@ -40,8 +40,7 @@ namespace BusinessLayer.Sinav
                 var klasikSinavSorulariTablosu = new KlasikSinav { KlasikSinavId = Guid.NewGuid(), KlasikSinavSorulars = klasikSinavSorularList };
 
                 // sinav tablosu
-                var sinavBilgileri = new EntityLayer.Sinav.Sinav { DersAdi = klasikSinavSorulari.DersAdi, SinavTuru = SinavTuru.Klasik, DersKodu = klasikSinavSorulari.DersKodu, SinavId = Guid.NewGuid(), SinavSahibi = sinavSahibiIdBilgisi, KlasikSinav = klasikSinavSorulariTablosu, SinavEklenmeTarihi = DateTime.Now };
-
+                var sinavBilgileri = new EntityLayer.Sinav.Sinav { SinavTuru = SinavTuru.Klasik, DerslerId = Guid.Parse(klasikSinavSorulari.DersGuidId), SinavId = Guid.NewGuid(), SinavSahibi = sinavSahibiIdBilgisi, KlasikSinav = klasikSinavSorulariTablosu, SinavEklenmeTarihi = DateTime.Now };
 
                 // Sinav Bilgileri kayıt edildi
                 UnitOfWork.SinavRepository.Add(sinavBilgileri);
@@ -93,8 +92,7 @@ namespace BusinessLayer.Sinav
                 // Sinav tablosu verileri
                 var sinavTablosu = new EntityLayer.Sinav.Sinav
                 {
-                    DersAdi = testSinavSorulari.DersAdi,
-                    DersKodu = testSinavSorulari.DersKodu,
+                    DerslerId = Guid.Parse(testSinavSorulari.DersGuidId),
                     SinavId = Guid.NewGuid(),
                     SinavSahibi = sinavSahibiIdBilgisi,
                     SinavTuru = SinavTuru.Test,

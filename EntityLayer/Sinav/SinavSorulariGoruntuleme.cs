@@ -8,5 +8,6 @@ namespace EntityLayer.Sinav
     {
         public List<TestSinavSorular> TestSinavSorular { get; set; }
         public List<KlasikSinav> KlasikSinav { get; set; }
+        public string DersAdi { get; set; }
     }
 }

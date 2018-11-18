@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Ders Listesi";
+}
+
+<link href="~/css/dataTables/datatables.min.css" rel="stylesheet" />
+<script src="~/js/dataTables/datatables.min.js"></script>
+
+<link href="~/css/sweetalert/sweetalert.css" rel="stylesheet" />
+<script src="~/js/sweetalert/sweetalert.min.js"></script>
+
+<script src="~/js/My/Dersler.js"></script>
+
+<div class="card card-nav-tabs">
+    <div class="card-header card-header-warning">
+        <b>Ders Listesi</b>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-6">
+                        <input type="number" placeholder="Ders Kodu" class="form-control" id="inputDersKodu" />
+                    </div>
+                    <div class="col-6">
+                        <input type="text" placeholder="Ders İsmi" class="form-control" id="inputDersIsmi" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button id="buttonDersEkle" class="btn btn-success" onclick="DersKayit()">Kayıt Et</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+
+<div id="dersListesi">
+    <table id="tableDersListesi" class="table table-striped table-bordered table-hover" style="width:100%">
+        <thead>
+            <tr>
+                <th>Ders Kodu</th>
+                <th>Ders Adı</th>
+                <th>Eklenme Tarihi</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>

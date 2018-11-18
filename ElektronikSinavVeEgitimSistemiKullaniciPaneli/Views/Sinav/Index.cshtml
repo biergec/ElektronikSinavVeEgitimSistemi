@@ -16,11 +16,6 @@
 <br />
 
 <form method="post">
-    <div class="form-group">
-        <label for="DersAdi" class="bmd-label-floating">Ders Adı</label>
-        <input type="text" class="form-control" asp-for="DersAdi" id="DersAdi">
-        <span asp-validation-for="DersAdi"></span>
-    </div>
     <br />
     <div class="form-group">
         <label for="SinavTuru" class="bmd-label-floating">Sınav Türünü Seçiniz</label>
@@ -29,9 +24,12 @@
     </div>
     <br />
     <div class="form-group">
-        <label for="DersKodu" class="bmd-label-floating">Ders Kodu</label>
-        <input type="text" class="form-control" asp-for="DersKodu" id="DersKodu">
-        <span asp-validation-for="DersKodu"></span>
+        <label for="DersKodu" class="bmd-label-floating">Ders Adı</label>
+        
+        <select asp-for="DersGuidId" class="form-control" id="DersKodu" asp-items="@((IEnumerable<SelectListItem>)ViewBag.DersListesi)">
+        </select>
+        
+        <span asp-validation-for="DersGuidId"></span>
     </div>
     <br />
     <div class="form-group">
@@ -56,4 +54,5 @@
             document.getElementById("SoruSikSayisi").disabled = true;
         }
     }
+
 </script>

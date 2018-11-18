@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.DersIslemleri;
 using BusinessLayer.Login;
 using BusinessLayer.Sinav;
 using DAL.Context;
@@ -70,6 +71,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
             services.AddScoped<IKayitOl, KayitOlManager>();
             services.AddScoped<ISinavOlustur, SinavOlustur>();
             services.AddScoped<IEgitmenSinavBilgileri, EgitmenSinavBilgileri>();
+            services.AddScoped<IDersIslemleri, DersIslemleri>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
