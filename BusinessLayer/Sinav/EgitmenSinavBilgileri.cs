@@ -26,7 +26,7 @@ namespace BusinessLayer.Sinav
         {
             try
             {
-                var sinavlar = _unitOfWork.SinavRepository.IncludeMany(x=>x.Dersler).Where(x=>x.SinavSahibi == sinavSahibiGuidId).OrderBy(x=>x.SinavEklenmeTarihi);
+                var sinavlar = _unitOfWork.SinavRepository.IncludeMany(x => x.Dersler).Where(x => x.SinavSahibi == sinavSahibiGuidId).OrderBy(x => x.SinavEklenmeTarihi);
 
                 return new Result { isSuccess = true, Data = sinavlar };
             }
@@ -57,6 +57,40 @@ namespace BusinessLayer.Sinav
 
 
 
+        // sınav aktiflik durumunu tersine çevirir
+        public Result SinavAktiflikDurumuDegistir(Guid sinavId)
+        {
+            try
+            {
+                var aktiflikDurumuDegistilecekSinav = _unitOfWork.SinavRepository.SingleOrDefault(x=>x.SinavId == sinavId);
+                if (aktiflikDurumuDegistilecekSinav == null)
+                    throw new ArgumentNullException("Sinav id ile ilişkili veri bulunamadı.");
+
+                var sinavAktiflikDurumu = aktiflikDurumuDegistilecekSinav.SinavAktiflikDurumu;
+
+                if (sinavAktiflikDurumu)
+                {
+                    aktiflikDurumuDegistilecekSinav.SinavAktiflikDurumu = false;
+                    _unitOfWork.SaveChanges();
+
+                    return new Result { isSuccess = true, Message = "Sınav başarılı bir şekilde pasif hale getirildi." };
+                }else
+                {
+                    aktiflikDurumuDegistilecekSinav.SinavAktiflikDurumu = true;
+                    _unitOfWork.SaveChanges();
+
+                    return new Result { isSuccess = true, Message = "Sınav başarılı bir şekilde aktif hale getirildi." };
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Sinav aktiflik durumu değiştirme işlemi başarısız. Detaylar -> " + e + " | Sınav Id -> " + sinavId);
+                return new Result { isSuccess = false, Message = "İşlem gerçekleştirilemedi. Lütfen daha sonra tekrar deneyiniz." };
+            }
+        }
+
+
+
         public Result SinavSoruBilgileri(Guid sinavId)
         {
             try
@@ -70,7 +104,7 @@ namespace BusinessLayer.Sinav
                 sinavSoruBilgileri.Add(new SinavSorulariGoruntuleme());
 
                 // Ders adını ayrı sorgu olarak buluyoruz
-                sinavSoruBilgileri[0].DersAdi = _unitOfWork.DerslerRepository.SingleOrDefault(x=>x.DerslerId == sinavTuru.DerslerId).DersAdi;
+                sinavSoruBilgileri[0].DersAdi = _unitOfWork.DerslerRepository.SingleOrDefault(x => x.DerslerId == sinavTuru.DerslerId).DersAdi;
 
                 // Sınav türüne göre soruları çekiyoruz
                 switch (sinavTuru.SinavTuru)
@@ -101,7 +135,6 @@ namespace BusinessLayer.Sinav
                 return new Result { isSuccess = false, Message = "İşlem gerçekleştirilemedi." };
             }
         }
-
 
 
     }

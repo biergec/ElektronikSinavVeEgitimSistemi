@@ -11,6 +11,8 @@ namespace EntityLayer.Sinav
         public double DersKodu { get; set; }
         public string DersAdi { get; set; }
 
+        public string DersKayitAnahtari { get; set; }
+
         public DateTime DersEklenmeTarihi { get; set; }
     }
 }

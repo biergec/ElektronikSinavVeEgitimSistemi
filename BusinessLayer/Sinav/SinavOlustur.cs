@@ -12,11 +12,11 @@ namespace BusinessLayer.Sinav
     public class SinavOlustur : ISinavOlustur
     {
         private readonly ILogger<SinavOlustur> _logger;
-        private IUnitOfWork UnitOfWork { get; }
+        private readonly IUnitOfWork _unitOfWork;
 
         public SinavOlustur(IUnitOfWork unitOfWork, ILogger<SinavOlustur> logger)
         {
-            this.UnitOfWork = unitOfWork;
+            this._unitOfWork = unitOfWork;
             this._logger = logger;
         }
 
@@ -40,12 +40,12 @@ namespace BusinessLayer.Sinav
                 var klasikSinavSorulariTablosu = new KlasikSinav { KlasikSinavId = Guid.NewGuid(), KlasikSinavSorulars = klasikSinavSorularList };
 
                 // sinav tablosu
-                var sinavBilgileri = new EntityLayer.Sinav.Sinav { SinavTuru = SinavTuru.Klasik, DerslerId = Guid.Parse(klasikSinavSorulari.DersGuidId), SinavId = Guid.NewGuid(), SinavSahibi = sinavSahibiIdBilgisi, KlasikSinav = klasikSinavSorulariTablosu, SinavEklenmeTarihi = DateTime.Now };
+                var sinavBilgileri = new EntityLayer.Sinav.Sinav { SinavTuru = SinavTuru.Klasik, DerslerId = Guid.Parse(klasikSinavSorulari.DersGuidId), SinavId = Guid.NewGuid(), SinavSahibi = sinavSahibiIdBilgisi, KlasikSinav = klasikSinavSorulariTablosu, SinavEklenmeTarihi = DateTime.Now, SinavAktiflikDurumu = false, SinavSuresiDakika = 0 };
 
                 // Sinav Bilgileri kayıt edildi
-                UnitOfWork.SinavRepository.Add(sinavBilgileri);
+                _unitOfWork.SinavRepository.Add(sinavBilgileri);
 
-                UnitOfWork.SaveChanges();
+                _unitOfWork.SaveChanges();
 
                 return new Result { isSuccess = true, Message = "Sınav başarılı bir şekilde kayıt edildi." };
             }
@@ -97,11 +97,13 @@ namespace BusinessLayer.Sinav
                     SinavSahibi = sinavSahibiIdBilgisi,
                     SinavTuru = SinavTuru.Test,
                     SinavEklenmeTarihi = DateTime.Now,
-                    TestSinav = testSinavTestSinavTablosu
+                    TestSinav = testSinavTestSinavTablosu,
+                    SinavAktiflikDurumu = false,
+                    SinavSuresiDakika = 0
                 };
 
-                UnitOfWork.SinavRepository.Add(sinavTablosu);
-                UnitOfWork.SaveChanges();
+                _unitOfWork.SinavRepository.Add(sinavTablosu);
+                _unitOfWork.SaveChanges();
 
                 return new Result { isSuccess = true, Message = "Test sınavı başarılı bir şekilde kayıt edildi." };
             }
@@ -111,6 +113,31 @@ namespace BusinessLayer.Sinav
                 return new Result { isSuccess = false, Message = "Sınav kayıt işlemi başarısız." };
             }
         }
+
+
+
+        public Result SinavSuresiDegistir(Guid sinavId, int sinavSuresiDakika)
+        {
+            try
+            {
+                var sinav = _unitOfWork.SinavRepository.SingleOrDefault(x=>x.SinavId == sinavId);
+                if (sinav == null)
+                    throw new ArgumentNullException("Sinav id ile eşleşen sınav bulunamadı.");
+
+                sinav.SinavSuresiDakika = sinavSuresiDakika;
+
+                _unitOfWork.SaveChanges();
+
+                return new Result { isSuccess = true, Message = "Sinav süresi "+sinavSuresiDakika+" Dakika olarak güncellendi." };
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Sınav süresi güncelleme hatası - > " + e);
+                return new Result { isSuccess = false, Message = "Sinav süresi güncellemedi!" };
+            }
+        }
+
+
 
     }
 }

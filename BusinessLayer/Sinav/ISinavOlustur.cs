@@ -10,5 +10,6 @@ namespace BusinessLayer.Sinav
     {
         Result KlasikSinavOlustur(KlasikSinavSorulari klasikSinavSorulari, Guid sinavSahibiIdBilgisi);
         Result TestSinavOlustur(TestSinavSorulari testSinavSorulari, Guid sinavSahibiIdBilgisi);
+        Result SinavSuresiDegistir(Guid sinavId, int sinavSuresiDakika);
     }
 }

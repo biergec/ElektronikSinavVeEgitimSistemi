@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EntityLayer.Ders;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -13,8 +14,11 @@ namespace EntityLayer.Sinav
         public double DersKodu { get; set; }
         public string DersAdi { get; set; }
 
+        public string DersKayitAnahtari { get; set; }
+
         public DateTime DersEklenmeTarihi { get; set; }
 
-        public ICollection<Sinav> Sinav;
+        public ICollection<Sinav> Sinav { get; set; }
+        public ICollection<KayitliDerslerim> KayitliDerslerim { get; set; }
     }
 }

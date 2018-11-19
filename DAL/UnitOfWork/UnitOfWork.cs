@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using DAL.Context;
 using DAL.Repository;
-using EntityLayer.Sinav;
+using EntityLayer.BaslayanSinavlar;
+using EntityLayer.Ders;
 using EntityLayer.Sinav;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -19,10 +20,12 @@ namespace DAL.UnitOfWork
         private IRepository<KlasikSinav> _klasikSinavRepository;
         private IRepository<KlasikSinavSorular> _klasikSinavSorularRepository;
         private IRepository<Dersler> _derslerRepository;
+        private IRepository<SuresiBaslamisSinavlar> _suresiBaslamisSinavlarRepository;
+        private IRepository<KayitliDerslerim> _kayitliDerslerimRepository;
 
         public UnitOfWork(EfContext context)
         {
-            this.Context = context;
+            Context = context;
         }
 
         public IRepository<Sinav> SinavRepository
@@ -74,10 +77,29 @@ namespace DAL.UnitOfWork
         }
 
 
+        public IRepository<SuresiBaslamisSinavlar> SuresiBaslamisSinavlarRepository
+        {
+            get
+            {
+                return _suresiBaslamisSinavlarRepository = _suresiBaslamisSinavlarRepository ?? new Repository<SuresiBaslamisSinavlar>(Context);
+            }
+        }
+
+
+        public IRepository<KayitliDerslerim> KayitliDerslerimRepository
+        {
+            get
+            {
+                return _kayitliDerslerimRepository = _kayitliDerslerimRepository ?? new Repository<KayitliDerslerim>(Context);
+            }
+        }
+
+
         public void SaveChanges()
         {
             Context.SaveChanges();
         }
+
 
     }
 }

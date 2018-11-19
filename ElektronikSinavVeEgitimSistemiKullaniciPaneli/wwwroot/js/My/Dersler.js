@@ -115,12 +115,14 @@ function DersKayit() {
 
     var dersKodu = $("#inputDersKodu").val();
     var dersAdi = $("#inputDersIsmi").val();
+    var dersKayitAnahtari = $("#inputDersKayitAnahtari").val();
 
     if (!(dersKodu || dersAdi || dersAdi == "" || dersKodu == "")) {
         showNotification("top", "right", "warning", "Lütfen Ders Kodu ve Ders İsmini Giriniz!");
     }
 
     var dersEkleViewModel = {
+        DersKayitAnahtari : dersKayitAnahtari,
         DersKodu : dersKodu,
         DersAdi : dersAdi
     };

@@ -4,59 +4,22 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
 {
     [DbContext(typeof(EfContext))]
-    partial class EfContextModelSnapshot : ModelSnapshot
+    [Migration("20181119133759_initialize1234")]
+    partial class initialize1234
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("EntityLayer.BaslayanSinavlar.SuresiBaslamisSinavlar", b =>
-                {
-                    b.Property<Guid>("SuresiBaslamisSinavlarId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("OgrenciId");
-
-                    b.Property<DateTime>("SinavBaslamaZamani");
-
-                    b.Property<DateTime>("SinavBitisZamani");
-
-                    b.Property<Guid>("SinavId");
-
-                    b.HasKey("SuresiBaslamisSinavlarId");
-
-                    b.HasIndex("SinavId")
-                        .IsUnique();
-
-                    b.ToTable("SuresiBaslamisSinavlars");
-                });
-
-            modelBuilder.Entity("EntityLayer.Ders.KayitliDerslerim", b =>
-                {
-                    b.Property<Guid>("KayitliDerslerimId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("DersKayitTarihi");
-
-                    b.Property<Guid>("DerslerId");
-
-                    b.Property<Guid>("OgrenciId");
-
-                    b.HasKey("KayitliDerslerimId");
-
-                    b.HasIndex("DerslerId");
-
-                    b.ToTable("KayitliDerslerims");
-                });
 
             modelBuilder.Entity("EntityLayer.Login.AppUser", b =>
                 {
@@ -134,7 +97,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
 
                     b.HasKey("DerslerId");
 
-                    b.ToTable("Derslers");
+                    b.ToTable("Dersler");
                 });
 
             modelBuilder.Entity("EntityLayer.Sinav.KlasikSinav", b =>
@@ -165,7 +128,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
 
                     b.HasIndex("KlasikSinavId");
 
-                    b.ToTable("KlasikSinavSorulars");
+                    b.ToTable("KlasikSinavSorular");
                 });
 
             modelBuilder.Entity("EntityLayer.Sinav.Sinav", b =>
@@ -180,8 +143,6 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
                     b.Property<DateTime>("SinavEklenmeTarihi");
 
                     b.Property<Guid>("SinavSahibi");
-
-                    b.Property<int>("SinavSuresiDakika");
 
                     b.Property<int>("SinavTuru");
 
@@ -222,7 +183,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
 
                     b.HasIndex("TestSinavId");
 
-                    b.ToTable("TestSinavSorulars");
+                    b.ToTable("TestSinavSorular");
                 });
 
             modelBuilder.Entity("EntityLayer.Sinav.TestSinavSoruSiklari", b =>
@@ -240,7 +201,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
 
                     b.HasIndex("TestSinavSorularId");
 
-                    b.ToTable("TestSinavSoruSiklaris");
+                    b.ToTable("TestSinavSoruSiklari");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -357,22 +318,6 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("EntityLayer.BaslayanSinavlar.SuresiBaslamisSinavlar", b =>
-                {
-                    b.HasOne("EntityLayer.Sinav.Sinav", "Sinav")
-                        .WithOne("SuresiBaslamisSinavlar")
-                        .HasForeignKey("EntityLayer.BaslayanSinavlar.SuresiBaslamisSinavlar", "SinavId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("EntityLayer.Ders.KayitliDerslerim", b =>
-                {
-                    b.HasOne("EntityLayer.Sinav.Dersler", "Dersler")
-                        .WithMany("KayitliDerslerim")
-                        .HasForeignKey("DerslerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("EntityLayer.Sinav.KlasikSinav", b =>
                 {
                     b.HasOne("EntityLayer.Sinav.Sinav", "Sinavs")
@@ -392,7 +337,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
             modelBuilder.Entity("EntityLayer.Sinav.Sinav", b =>
                 {
                     b.HasOne("EntityLayer.Sinav.Dersler", "Dersler")
-                        .WithMany("Sinav")
+                        .WithMany()
                         .HasForeignKey("DerslerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

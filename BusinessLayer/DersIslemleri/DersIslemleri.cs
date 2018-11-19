@@ -33,7 +33,7 @@ namespace BusinessLayer.DersIslemleri
                 }
 
 
-                _unitOfWork.DerslerRepository.Add(new Dersler { DersAdi = dersEkleViewModel.DersAdi, DersEklenmeTarihi = DateTime.Now, DersKodu = dersEkleViewModel.DersKodu, DerslerId = Guid.NewGuid() });
+                _unitOfWork.DerslerRepository.Add(new Dersler { DersAdi = dersEkleViewModel.DersAdi, DersEklenmeTarihi = DateTime.Now, DersKodu = dersEkleViewModel.DersKodu, DerslerId = Guid.NewGuid(), DersKayitAnahtari = dersEkleViewModel.DersKayitAnahtari });
                 _unitOfWork.SaveChanges();
 
                 return new Result { isSuccess = true, Message = "Ders ekleme işlemi başarılı." };
@@ -65,7 +65,7 @@ namespace BusinessLayer.DersIslemleri
         {
             try
             {
-                var dersList = _unitOfWork.DerslerRepository.GetAll().Select(x => new DersViewModel { DersAdi = x.DersAdi, DersEklenmeTarihi = x.DersEklenmeTarihi, DersKodu = x.DersKodu, DerslerId = x.DerslerId }).ToList();
+                var dersList = _unitOfWork.DerslerRepository.GetAll().Select(x => new DersViewModel { DersAdi = x.DersAdi, DersEklenmeTarihi = x.DersEklenmeTarihi, DersKodu = x.DersKodu, DerslerId = x.DerslerId, DersKayitAnahtari = x.DersKayitAnahtari }).ToList();
 
                 return new Result { isSuccess = true, Data = dersList };
             }
@@ -77,10 +77,26 @@ namespace BusinessLayer.DersIslemleri
         }
 
 
+
         public string GetDersAdi(Guid dersId)
         {
             return _unitOfWork.DerslerRepository.SingleOrDefault(x=>x.DerslerId == dersId).DersAdi;
         }
+
+
+        public List<DersViewModel> GetKayitOlmadigimDersler(Guid ogrenciId)
+        {
+            var dersList = _unitOfWork.KayitliDerslerimRepository.IncludeMany(x => x.Dersler)
+                .Where(x => x.OgrenciId != ogrenciId).Select(x => new DersViewModel
+                {
+                    DersAdi = x.Dersler.DersAdi, DersEklenmeTarihi = x.Dersler.DersEklenmeTarihi,
+                    DersKodu = x.Dersler.DersKodu, DerslerId = x.DerslerId,
+                    DersKayitAnahtari = x.Dersler.DersKayitAnahtari
+                }).ToList();
+
+            return dersList;
+        }
+
 
     }
 }

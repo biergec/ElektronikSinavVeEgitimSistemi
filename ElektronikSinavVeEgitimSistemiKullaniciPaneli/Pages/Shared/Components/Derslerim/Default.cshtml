@@ -1,0 +1,79 @@
+﻿@model List<EntityLayer.Ders.KayitliDerslerim>
+
+<div class="card card-nav-tabs">
+    <div class="card-header card-header-warning">
+        <b>Kayıtlı Derslerim</b>
+    </div>
+    <div class="card-body">
+        @if (Model == null || Model.Count == 0)
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-default">Kayıtlı dersiniz bulunmamaktadır.</button>
+                </div>
+            </div>
+        }
+        else
+        {
+
+            foreach (var item in Model)
+            {
+                <div class="row">
+                    <div class="col-md-8">
+                        <button type="button" class="btn btn-block">@item.Dersler.DersAdi</button>
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-warning dropdown-toggle" id="dropdownDetails" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true"></button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownDetails">
+                                <a href="#" onclick="KayitliDersiSil('@item.DerslerId')" class="dropdown-item"><i class="material-icons"> delete_forever</i>&nbsp;Dersi Sil</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<script>
+    function KayitliDersiSil(dersId) {
+        var alertOnay = confirm("İlgili dersi silmek istediğinize emin misiniz?");
+        if (!alertOnay) {
+            return;
+        }
+
+        $.ajax({
+            url: '/Home/KayitliDersSil',
+            type: 'POST',
+            dataType: 'json',
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            data: {
+                dersId: dersId
+            },
+            success: function (result) {
+                if (result.isSuccess) {
+
+                    showNotification("top", "right", "success", result.message + " Liste birkaç saniye içerisinde yenilenecektir.");
+
+                    setTimeout(function (parameters) {
+                        // İşlem başarılı ise sınavlarım menüsüne yönlendirsin!
+                        window.location.href = "/";
+                    }, 3000);
+
+                } else {
+                    showNotification("top", "right", "warning", result.message);
+                }
+            },
+            error: function () {
+                showNotification("top", "right", "warning", "İşlem gerçekleştirilemedi!");
+            }
+        });
+
+    }
+</script>
+

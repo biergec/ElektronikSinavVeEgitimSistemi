@@ -12,5 +12,6 @@ namespace BusinessLayer.DersIslemleri
         Result DersSil(Guid dersId);
         Result GetAllDersler();
         string GetDersAdi(Guid dersId);
+        List<DersViewModel> GetKayitOlmadigimDersler(Guid ogrenciId);
     }
 }

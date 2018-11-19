@@ -7,7 +7,6 @@ using BusinessLayer.Sinav;
 using DAL.UnitOfWork;
 using EntityLayer;
 using EntityLayer.Sinav;
-using EntityLayer.Sinav;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,35 +23,22 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         private readonly ISinavOlustur _sinavOlustur;
         private readonly IEgitmenSinavBilgileri _egitmenSinavBilgileri;
         private readonly IDersIslemleri _dersIslemleri;
+        private readonly IDersListesiSelectListItem _dersListesiSelectListItem;
 
-        public SinavController(ISinavOlustur sinavOlustur, IEgitmenSinavBilgileri egitmenSinavBilgileri, IDersIslemleri dersIslemleri)
+        public SinavController(ISinavOlustur sinavOlustur, IEgitmenSinavBilgileri egitmenSinavBilgileri, IDersIslemleri dersIslemleri, IDersListesiSelectListItem dersListesiSelectListItem)
         {
             this._sinavOlustur = sinavOlustur;
             this._egitmenSinavBilgileri = egitmenSinavBilgileri;
             this._dersIslemleri = dersIslemleri;
+            this._dersListesiSelectListItem = dersListesiSelectListItem;
         }
 
 
         public IActionResult Index()
         {
-            var dersListesi = _dersIslemleri.GetAllDersler();
-            ViewBag.DersListesi = DersListesiTurDonusumu((IEnumerable<DersViewModel>)dersListesi.Data);
+            ViewBag.DersListesi = _dersListesiSelectListItem.DersListesi();
 
             return View();
-        }
-
-
-        // ders listesini List<SelectListItem> tipine çeviriyouz
-        private List<SelectListItem> DersListesiTurDonusumu(IEnumerable<DersViewModel> dersList)
-        {
-            List<SelectListItem> dersListTurDonusumu = new List<SelectListItem>();
-
-            foreach (var itemDersler in dersList)
-            {
-                dersListTurDonusumu.Add(new SelectListItem { Value = itemDersler.DerslerId.ToString(), Text = itemDersler.DersAdi });
-            }
-
-            return dersListTurDonusumu;
         }
 
 
@@ -71,15 +57,13 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
                         break;
                 }
 
-                var dersListesi = _dersIslemleri.GetAllDersler();
-                ViewBag.DersListesi = DersListesiTurDonusumu((IEnumerable<DersViewModel>)dersListesi.Data);
+                ViewBag.DersListesi = _dersListesiSelectListItem.DersListesi();
 
                 return View();
             }
             else
             {
-                var dersListesi = _dersIslemleri.GetAllDersler();
-                ViewBag.DersListesi = DersListesiTurDonusumu((IEnumerable<DersViewModel>)dersListesi.Data);
+                ViewBag.DersListesi = _dersListesiSelectListItem.DersListesi();
 
                 return View();
             }
@@ -210,6 +194,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
+
         // Datayı her zaman object doner on taraft tipini kontrol et parse et
         [HttpGet]
         public IActionResult SinavBilgileriGoster(string sinavId)
@@ -220,6 +205,32 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
             var result = _egitmenSinavBilgileri.SinavSoruBilgileri(Guid.Parse(sinavId));
 
             return View((List<SinavSorulariGoruntuleme>)result.Data);
+        }
+
+
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<JsonResult> SinavAktiflikDurumuDeğiştir(string sinavId)
+        {
+            if (sinavId == null)
+                return new JsonResult(new Result { isSuccess = false, Message = "Sınav silme işlemi başarısız!.." });
+
+            var result = await Task.FromResult(_egitmenSinavBilgileri.SinavAktiflikDurumuDegistir(Guid.Parse(sinavId)));
+
+            return new JsonResult(new Result { isSuccess = result.isSuccess, Message = result.Message });
+        }
+
+
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<JsonResult> SinavSuresiniDeğiştir(string sinavId, int sinavSuresi)
+        {
+            if (sinavSuresi < 0 || sinavSuresi == 0 || sinavId.Length < 1 )
+                return new JsonResult(new Result { isSuccess = false, Message = "Sınav süresi en az 1 dakika olabilir." });
+
+            var result = await Task.FromResult(_sinavOlustur.SinavSuresiDegistir(Guid.Parse(sinavId), sinavSuresi));
+
+            return new JsonResult(new Result { isSuccess = result.isSuccess, Message = result.Message });
         }
 
 

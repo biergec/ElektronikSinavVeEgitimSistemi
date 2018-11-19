@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using DAL.Repository;
+using EntityLayer.BaslayanSinavlar;
+using EntityLayer.Ders;
 using EntityLayer.Sinav;
 using EntityLayer.Sinav;
 
@@ -18,6 +20,10 @@ namespace DAL.UnitOfWork
         IRepository<KlasikSinavSorular> KlasikSinavSorularRepository { get; }
 
         IRepository<Dersler> DerslerRepository { get; }
+
+        IRepository<SuresiBaslamisSinavlar> SuresiBaslamisSinavlarRepository { get; }
+
+        IRepository<KayitliDerslerim> KayitliDerslerimRepository { get; }
 
         void SaveChanges();
     }

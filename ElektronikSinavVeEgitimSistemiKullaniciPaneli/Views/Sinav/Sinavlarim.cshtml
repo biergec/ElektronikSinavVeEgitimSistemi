@@ -36,8 +36,16 @@ else
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-11">
+                            @if (item.SinavAktiflikDurumu)
+	                        {
+	                            <button type="button" class="btn btn-success">Aktif</button>
+	                        }else
+                            {
+                                <button type="button" class="btn btn-default">Pasif</button>
+                            }
                             <button type="button" class="btn btn-default">Sınav Türü : @item.SinavTuru</button>
                             <button type="button" class="btn btn-default">Ders : @item.Dersler.DersAdi</button>
+                            <button type="button" class="btn btn-default">Süre : @item.SinavSuresiDakika Dakika</button>
                             <button type="button" class="btn btn-default">Eklenme Tarihi : @item.SinavEklenmeTarihi.ToShortDateString()</button>
                         </div>
                         <div class="col-md-1">
@@ -46,6 +54,18 @@ else
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownDetails">
                                     <a asp-action="SinavBilgileriGoster" asp-route-sinavId="@item.SinavId.ToString()" class="dropdown-item"><i class="material-icons"> info </i> &nbsp; Soruları Önizle</a>
+
+                                    @if (item.SinavAktiflikDurumu)
+                                    {
+                                        <a href="#" onclick="SinavAktiflikDurumuDegistir('@item.SinavId', 'Pasif')" class="dropdown-item"><i class="material-icons"> pause</i>&nbsp;Sınavı Pasif Yap</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="#" onclick="SinavAktiflikDurumuDegistir('@item.SinavId', 'Aktif')" class="dropdown-item"><i class="material-icons"> play_arrow</i>&nbsp; Sınavı Aktif Yap</a>
+                                    }
+                                    
+                                    <a href="#" onclick="SinavSuresiGuncelleModalAcmadanOnce('@item.SinavSuresiDakika', '@item.SinavId')" class="dropdown-item" data-toggle="modal" data-target="#sinavZamaniModal"><i class="material-icons"> access_time</i>&nbsp;Sınavı Süresi Güncelle</a>
+
                                     <a href="#" onclick="SinaviSil('@item.SinavId')" class="dropdown-item"><i class="material-icons"> delete_forever</i>&nbsp;Sınavı Sil</a>
                                 </div>
 
@@ -57,3 +77,32 @@ else
         }
     </div>
 }
+
+<input type="hidden" id="hiddenSinavIdSinavSuresiDegistir" value="" />
+
+<!-- Modal -->
+<div class="modal fade" id="sinavZamaniModal" tabindex="-1" role="dialog" aria-labelledby="SinavZamani" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Sinav Süresini Ayarla</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Güncel Sınav Süresi : <b id="sinavSuresiGosterimlani"></b>  Dakika
+                <br />
+                <div class="row">
+                    <div class="col-12">
+                        <input type="text" class="form-control" id="inputModalSinavSuresi" placeholder="Sınav süresini dakika olarak giriniz." min="1">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-primary" onclick="SinavSuresiGuncelle()">Süreyi Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>

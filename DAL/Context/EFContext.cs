@@ -2,9 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using EntityLayer.BaslayanSinavlar;
+using EntityLayer.Ders;
 using EntityLayer.Sinav;
 using EntityLayer.Login;
-using EntityLayer.Sinav;
 
 namespace DAL.Context
 {
@@ -20,6 +21,12 @@ namespace DAL.Context
         public DbSet<Sinav> Sinavs { get; set; }
         public DbSet<KlasikSinav> KlasikSinavs { get; set; }
         public DbSet<TestSinav> TestSinavs { get; set; }
+        public DbSet<TestSinavSorular> TestSinavSorulars { get; set; }
+        public DbSet<KlasikSinavSorular> KlasikSinavSorulars { get; set; }
+        public DbSet<TestSinavSoruSiklari> TestSinavSoruSiklaris { get; set; }
+        public DbSet<Dersler> Derslers { get; set; }
+        public DbSet<SuresiBaslamisSinavlar> SuresiBaslamisSinavlars { get; set; }
+        public DbSet<KayitliDerslerim> KayitliDerslerims { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -44,6 +51,18 @@ namespace DAL.Context
             builder.Entity<TestSinavSorular>()
                 .HasMany(c => c.TestSinavSoruSiklari)
                 .WithOne(c => c.TestSinavSorular).HasForeignKey(c=>c.TestSinavSorularId).OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Dersler>()
+                .HasMany(x => x.Sinav)
+                .WithOne(x => x.Dersler).HasForeignKey(x=>x.DerslerId).OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Sinav>()
+                .HasOne(c => c.SuresiBaslamisSinavlar)
+                .WithOne(c => c.Sinav).HasForeignKey<SuresiBaslamisSinavlar>(x=>x.SinavId).OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Dersler>()
+                .HasMany(x => x.KayitliDerslerim)
+                .WithOne(x => x.Dersler).HasForeignKey(x => x.DerslerId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
