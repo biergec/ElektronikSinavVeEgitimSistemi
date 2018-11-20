@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BusinessLayer.DersIslemleri;
 using BusinessLayer.Login;
 using BusinessLayer.Sinav;
+using BusinessLayer.SinavGiris;
 using DAL.Context;
 using DAL.UnitOfWork;
 using EntityLayer.Login;
@@ -74,6 +75,9 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
             services.AddScoped<IDersIslemleri, DersIslemleri>();
             services.AddScoped<IKayitliDerslerim, KayitliDerslerimManger>();
             services.AddScoped<IDersListesiSelectListItem, DersListesiSelectListItem>();
+            services.AddScoped<IOgrenciGirebilecegiSinavlar, OgrenciGirebilecegiSinavlar>();
+            services.AddScoped<ISinavBilgileri, SinavBilgileri>();
+            services.AddScoped<ISinavKayit, SinavKayit>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

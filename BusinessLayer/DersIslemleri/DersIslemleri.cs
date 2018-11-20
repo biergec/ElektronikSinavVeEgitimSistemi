@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using DAL.UnitOfWork;
 using EntityLayer;
+using EntityLayer.Ders;
 using EntityLayer.Sinav;
 using Microsoft.Extensions.Logging;
 

@@ -1,0 +1,39 @@
+﻿@model List<EntityLayer.Sinav.SinavSorulariGoruntuleme>
+
+@{
+    ViewData["Title"] = Model[0].DersAdi +" Dersi Sınav Soruları";
+}
+
+<script src="~/js/My/KlasikSinavSinavaBasla.js"></script>
+
+<div class="card card-nav-tabs">
+    <div class="card-header card-header-danger">
+        <b> @Model[0].DersAdi Sınav Soruları</b>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-9">
+                Sınav Süreniz : @Model[0].KlasikSinav[0].Sinavs.SinavSuresiDakika Dakika
+            </div>
+            <div class="col-md-3">
+                Sinav Bitiş Saati : <b>@Model[0].KlasikSinav[0].Sinavs.SuresiBaslamisSinavlar.OgrenciSinavaBaslamaZamani.AddMinutes(Model[0].KlasikSinav[0].Sinavs.SinavSuresiDakika).ToShortTimeString()</b>
+            </div>
+        </div>
+    </div>
+</div>
+@foreach (var item2 in Model[0].KlasikSinav[0].KlasikSinavSorulars)
+{
+<div class="card card-nav-tabs">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                @item2.SoruMetni
+                <hr />
+                <textarea placeholder="Cevabınızı bu alana yazınız" cols="100" rows="10"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+}
+<hr />
+<a class="btn btn-facebook btn-lg col-md-12" style="color: white">Sınavı Kayıt Et</a>

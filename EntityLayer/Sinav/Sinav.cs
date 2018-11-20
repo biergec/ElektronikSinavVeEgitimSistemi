@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using EntityLayer.BaslayanSinavlar;
+using EntityLayer.Ders;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using EntityLayer.Sinav;
 

@@ -12,8 +12,8 @@ namespace EntityLayer.BaslayanSinavlar
         
         public Guid SinavId { get; set; }
         public Guid OgrenciId { get; set; }
-        public DateTime SinavBaslamaZamani { get; set; }
-        public DateTime SinavBitisZamani { get; set; }
+        public DateTime OgrenciSinavaBaslamaZamani { get; set; }
+        public DateTime OgrenciSinaviBitirmeZamani { get; set; }
 
         public Sinav.Sinav Sinav { get; set; }
     }

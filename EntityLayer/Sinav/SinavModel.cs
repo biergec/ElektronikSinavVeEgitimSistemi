@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using EntityLayer.Ders;
 using EntityLayer.Sinav;
 
 namespace EntityLayer.Sinav

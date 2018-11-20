@@ -1,4 +1,6 @@
 ﻿@using Microsoft.AspNet.Identity
+@model IEnumerable<EntityLayer.BaslayanSinavlar.AnaSayfaSinavlarimList>
+
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -15,8 +17,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">
-                            <select asp-items="@((IEnumerable<SelectListItem>) ViewBag.DersListesi)" id="dersListesi" class="form-control">
-                            </select>
+                            <select asp-items="@((IEnumerable<SelectListItem>) ViewBag.DersListesi)" id="dersListesi" class="form-control"></select>
                         </div>
                         <div class="col-md-7">
                             <input type="text" class="form-control" id="inputDersKayitAnahtari" placeholder="Kayıt anahtarını giriniz...">
@@ -27,7 +28,39 @@
                     </div>
                 </div>
             </div>
-            
+
+        </div>
+
+        <div class="row">
+            <div class="card-header card-header-warning col-md-12">
+                <b>Katılabileceğim Sınavlar</b>
+            </div>
+        </div>
+
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header card-header-text card-header-primary">
+                            <div class="card-text">
+                                <h4 class="card-title">@item.DersAdi Sınavı</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            Sınav <b>@item.SinavSuresiDakika</b> dakika sürecektir. <br />Süreniz sınava başladıktan sonra başlar ve sınav süresi sonunda sona erer.
+                            <br />Lütfen sınava başlamadan önce hazırlıklı olun. Başarılar.
+                            <br />
+                            <a class="btn btn-facebook btn-sm col-md-12" asp-action="SinavaBasla" asp-route-sinavId="@item.SinavId">Sınava Başla</a>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons">access_time</i> Sınav Süresi : @item.SinavSuresiDakika | Sinav Türü : @item.SinavTuru
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
     <div class="col-md-4">

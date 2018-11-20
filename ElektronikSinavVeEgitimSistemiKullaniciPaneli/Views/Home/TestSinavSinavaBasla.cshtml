@@ -1,0 +1,53 @@
+﻿@model List<EntityLayer.Sinav.SinavSorulariGoruntuleme>
+
+@{
+    ViewData["Title"] = "TestSinavSinavaBasla";
+}
+
+<div class="card card-nav-tabs">
+    <div class="card-header card-header-danger">
+        <b> @Model[0].DersAdi Sınav Soruları</b>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-9">
+                Sınav Süreniz : @Model[0].TestSinavSorular[0].TestSinav.Sinavs.SinavSuresiDakika Dakika
+            </div>
+            <div class="col-md-3">
+                Sinav Bitiş Saati : <b>@Model[0].TestSinavSorular[0].TestSinav.Sinavs.SuresiBaslamisSinavlar.OgrenciSinavaBaslamaZamani.AddMinutes(Model[0].TestSinavSorular[0].TestSinav.Sinavs.SinavSuresiDakika).ToShortTimeString()</b>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+@{int soruNumarasi = 1; }
+@foreach (var itemSinav in Model[0].TestSinavSorular)
+{
+    <div class="card card-nav-tabs">
+        <div class="card-header card-header-success">
+            Soru @(soruNumarasi) | @itemSinav.TestSinavSorusuMetni
+        </div>
+        <div class="card-body">
+            <input type="number" placeholder="Lütfen Cevabınızı Giriniz" class="form-control col-md-12" value="" />
+            @foreach (var item in itemSinav.TestSinavSoruSiklari)
+            {
+                <div class="row m-t-1">
+                    <div class="col-md-1">
+                        <a class="btn btn-info">@item.SoruSikki</a>
+                    </div>
+                    <div class="col-md-11">
+                        <a class="btn col-md-12" style="text-align: left;color: white">@item.SoruSikMetni</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <br />
+
+    {
+        soruNumarasi++;
+    }
+}
+
+<hr />
+<a class="btn btn-facebook btn-lg col-md-12" style="color: white">Sınavı Kayıt Et</a>
