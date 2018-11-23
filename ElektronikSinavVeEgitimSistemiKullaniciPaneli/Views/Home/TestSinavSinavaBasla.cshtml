@@ -4,6 +4,8 @@
     ViewData["Title"] = "TestSinavSinavaBasla";
 }
 
+<script src="~/js/My/TestSinavaBasla.js"></script>
+
 <div class="card card-nav-tabs">
     <div class="card-header card-header-danger">
         <b> @Model[0].DersAdi Sınav Soruları</b>
@@ -20,15 +22,28 @@
     </div>
 </div>
 <br />
-@{int soruNumarasi = 1; }
+
+<input type="hidden" id="soruSayisi" value="@Model[0].TestSinavSorular.Count" />
+<input type="hidden" id="testSinavId" value="@Model[0].TestSinavSorular[0].TestSinav.SinavId" />
+
+@{int soruNumarasi = 1;
+    string soruSikId = "";
+    string soruCevabiId = "";}
 @foreach (var itemSinav in Model[0].TestSinavSorular)
 {
+    {
+        soruSikId = "testSinavSorularId" + soruNumarasi;
+        soruCevabiId = "inputSoruCevabi" + soruNumarasi;
+    }
+
+    <input type="hidden" id="@soruSikId" value="@itemSinav.TestSinavSorularId" />
+
     <div class="card card-nav-tabs">
         <div class="card-header card-header-success">
             Soru @(soruNumarasi) | @itemSinav.TestSinavSorusuMetni
         </div>
         <div class="card-body">
-            <input type="number" placeholder="Lütfen Cevabınızı Giriniz" class="form-control col-md-12" value="" />
+            <input type="number" placeholder="Lütfen Cevabınızı Giriniz" class="form-control col-md-12" value="" id="@soruCevabiId" required/>
             @foreach (var item in itemSinav.TestSinavSoruSiklari)
             {
                 <div class="row m-t-1">
@@ -50,4 +65,4 @@
 }
 
 <hr />
-<a class="btn btn-facebook btn-lg col-md-12" style="color: white">Sınavı Kayıt Et</a>
+<a class="btn btn-facebook btn-lg col-md-12" style="color: white" onclick="TestSinavKayit()">Sınavı Kayıt Et</a>

@@ -24,6 +24,7 @@ namespace DAL.UnitOfWork
         private IRepository<KayitliDerslerim> _kayitliDerslerimRepository;
         private IRepository<GirilenKlasikSinavKayit> _girilenKlasikSinavKayitRepository;
         private IRepository<KlasikSinavSinavSoruCevap> _klasikSinavSinavSoruCevapRepository;
+        private IRepository<GirilenTestSinavSonuclari> _girilenTestSinavSonuclariRepository;
 
         public UnitOfWork(EfContext context)
         {
@@ -35,6 +36,14 @@ namespace DAL.UnitOfWork
             get
             {
                 return _sinavRepository = _sinavRepository ?? new Repository<Sinav>(Context);
+            }
+        }
+
+        public IRepository<GirilenTestSinavSonuclari> GirilenTestSinavSonuclariRepository
+        {
+            get
+            {
+                return _girilenTestSinavSonuclariRepository = _girilenTestSinavSonuclariRepository ?? new Repository<GirilenTestSinavSonuclari>(Context);
             }
         }
 

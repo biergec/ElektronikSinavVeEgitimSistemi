@@ -44,19 +44,30 @@ namespace BusinessLayer.Sinav
 
         public List<SinavaGirenKisiler> SinavaGirenKisiBilgileri(Guid sinavId)
         {
+            double ogrenciPuani = 0;
             var tumKullanicilar = _userManager.Users;
-            var sinavaGirenKisilerIdList = _unitOfWork.SuresiBaslamisSinavlarRepository.IncludeMany(x => x.Sinav, x => x.GirilenKlasikSinavKayits).Where(x=>x.SinavId == sinavId);
+            var sinavaGirenKisilerIdList = _unitOfWork.SuresiBaslamisSinavlarRepository.IncludeMany(x => x.Sinav, x => x.GirilenKlasikSinavKayits).Where(x => x.SinavId == sinavId);
             List<SinavaGirenKisiler> sinavaGirenKisiler = new List<SinavaGirenKisiler>();
 
             foreach (var item in sinavaGirenKisilerIdList)
             {
                 var sinavSahibiOgrenci = tumKullanicilar.FirstOrDefault(x => x.Id == item.Sinav.SinavSahibi.ToString());
 
-                var ogrenciPuani = _unitOfWork.GirilenKlasikSinavKayitRepository.IncludeMany(x=>x.KlasikSinavSinavSoruCevaps)
-                    .FirstOrDefault(x => x.SuresiBaslamisSinavlarId == Guid.Parse(item.SuresiBaslamisSinavlarId.ToString()))
-                   ;
+                if (item.Sinav.SinavTuru == SinavTuru.Klasik)
+                {
+                    var ogrenci = _unitOfWork.GirilenKlasikSinavKayitRepository.IncludeMany(x => x.KlasikSinavSinavSoruCevaps)
+                        .FirstOrDefault(x => x.SuresiBaslamisSinavlarId == Guid.Parse(item.SuresiBaslamisSinavlarId.ToString()));
+                    ogrenciPuani = (double)ogrenci.OgrenciSinavPuani;
+                }
+                else
+                {
+                    var sinavNotuTestSinav = _unitOfWork.SuresiBaslamisSinavlarRepository
+                        .IncludeMany(x => x.GirilenTestSinavSonuclaris)
+                        .SingleOrDefault(x => x.OgrenciId == item.OgrenciId && x.SinavId == sinavId).GirilenTestSinavSonuclaris.SinavPuani;
+                    ogrenciPuani = sinavNotuTestSinav;
+                }
 
-                sinavaGirenKisiler.Add(new SinavaGirenKisiler { AdSoyad = sinavSahibiOgrenci.Ad + " " + sinavSahibiOgrenci.Soyad, OkulNumarasi = sinavSahibiOgrenci.KurumOgrenciNumarasi, UserGuidId = item.Sinav.SinavSahibi.ToString(), SinavGuid = item.SinavId, AldigiNot = ogrenciPuani?.OgrenciSinavPuani });
+                sinavaGirenKisiler.Add(new SinavaGirenKisiler { AdSoyad = sinavSahibiOgrenci.Ad + " " + sinavSahibiOgrenci.Soyad, OkulNumarasi = sinavSahibiOgrenci.KurumOgrenciNumarasi, UserGuidId = item.Sinav.SinavSahibi.ToString(), SinavGuid = item.SinavId, AldigiNot = ogrenciPuani, SinavTuru = item.Sinav.SinavTuru });
             }
 
             return sinavaGirenKisiler;

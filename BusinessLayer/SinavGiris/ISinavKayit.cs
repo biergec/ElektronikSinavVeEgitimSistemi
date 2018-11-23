@@ -8,5 +8,6 @@ namespace BusinessLayer.SinavGiris
     {
         Result SinavBaslangicBilgisiKayit(Guid sinavId, Guid ogrenciId);
         Result KlasikSinavOgrenciSinaviKayit(KlasikSinavSinavKayitViewModel klasikSinavOgrenciCevaplari);
+        Result TestSinavOgrenciSinaviKayit(TestSinavSinaviKayitEtViewModel testSinavSinaviKayitEtViewModel);
     }
 }

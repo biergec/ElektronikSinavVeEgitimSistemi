@@ -27,21 +27,25 @@
         </div>
     }
 }
-<form method="post" asp-action="KlasikSinavNotlandir">
+<form asp-action="KlasikSinavNotlandir" asp-controller="SinavNotlandirma">
     <div class="row">
         <div class="col-md-12">
             <div class="card card-nav-tabs">
                 <div class="card-body">
-                    <input asp-for="sinavNotu" class="form-control" type="number" placeholder="Sınav notunu giriniz" min="0" max="100" />
+                    <input asp-for="sinavNotu" class="form-control" type="number" placeholder="Sınav notunu giriniz" min="0" max="100" required/>
                 </div>
             </div>
         </div>
         @{
             string ogrenciIdd = ViewBag.SinavSorulari[0].SuresiBaslamisSinavlar.OgrenciId.ToString();
-            string sinavIdd = ViewBag.SinavSorulari[0].SuresiBaslamisSinavlar.SinavId.ToString();
+            string sinavId = ViewBag.SinavSorulari[0].SuresiBaslamisSinavlar.SinavId.ToString();
         }
+
+        <input type="hidden" id="ogrenciIdd" value="@ogrenciIdd" asp-for="ogrenciId" />
+        <input type="hidden" id="sinavId" value="@sinavId" asp-for="sinavId" />
+
         <div class="col-md-12">
-            <a class="btn btn-facebook btn-sm col-md-12" asp-action="KlasikSinavNotlandir" asp-route-ogrenciId="@ogrenciIdd" asp-route-sinavId="@sinavIdd" asp-route-sinavNotu="20">Sınavı Notlandır</a>
+            <button type="submit" class="btn btn-facebook btn-sm col-md-12">Sınavı Notlandır</button>
         </div>
     </div>
 </form>

@@ -15,7 +15,8 @@ namespace EntityLayer.BaslayanSinavlar
         public DateTime OgrenciSinavaBaslamaZamani { get; set; }
         public DateTime OgrenciSinaviBitirmeZamani { get; set; }
 
-        public ICollection<GirilenKlasikSinavKayit> GirilenKlasikSinavKayits { get; set; }
         public Sinav.Sinav Sinav { get; set; }
+        public GirilenTestSinavSonuclari GirilenTestSinavSonuclaris { get; set; }
+        public ICollection<GirilenKlasikSinavKayit> GirilenKlasikSinavKayits { get; set; }
     }
 }

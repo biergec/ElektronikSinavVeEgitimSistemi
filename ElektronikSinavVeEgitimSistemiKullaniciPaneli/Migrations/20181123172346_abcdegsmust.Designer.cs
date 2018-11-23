@@ -4,14 +4,16 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
 {
     [DbContext(typeof(EfContext))]
-    partial class EfContextModelSnapshot : ModelSnapshot
+    [Migration("20181123172346_abcdegsmust")]
+    partial class abcdegsmust
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,8 +48,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
 
                     b.HasKey("GirilenTestSinavSonuclariId");
 
-                    b.HasIndex("SuresiBaslamisSinavlarId")
-                        .IsUnique();
+                    b.HasIndex("SuresiBaslamisSinavlarId");
 
                     b.ToTable("GirilenTestSinavSonuclaris");
                 });
@@ -263,9 +264,9 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
                     b.Property<Guid>("TestSinavSorularId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("SoruCevabi");
-
                     b.Property<Guid>("TestSinavId");
+
+                    b.Property<int>("TestSinavSoruSirasi");
 
                     b.Property<string>("TestSinavSorusuMetni");
 
@@ -419,8 +420,8 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
             modelBuilder.Entity("EntityLayer.BaslayanSinavlar.GirilenTestSinavSonuclari", b =>
                 {
                     b.HasOne("EntityLayer.BaslayanSinavlar.SuresiBaslamisSinavlar", "SuresiBaslamisSinavlar")
-                        .WithOne("GirilenTestSinavSonuclaris")
-                        .HasForeignKey("EntityLayer.BaslayanSinavlar.GirilenTestSinavSonuclari", "SuresiBaslamisSinavlarId")
+                        .WithMany("GirilenTestSinavSonuclaris")
+                        .HasForeignKey("SuresiBaslamisSinavlarId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

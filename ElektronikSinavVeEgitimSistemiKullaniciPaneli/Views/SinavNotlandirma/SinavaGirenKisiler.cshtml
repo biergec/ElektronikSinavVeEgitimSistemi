@@ -1,4 +1,5 @@
-﻿@model List<EntityLayer.EgitmenSinavBilgileri.SinavaGirenKisiler>
+﻿@using EntityLayer.Sinav
+@model List<EntityLayer.EgitmenSinavBilgileri.SinavaGirenKisiler>
 @{
     ViewData["Title"] = "Sınava Giren Kişilerr";
 }
@@ -29,7 +30,10 @@
                        Aldığı Not : <b> @sinavaGirenKisiler.AldigiNot</b> 
                     </div>
                     <div class="col-md-12">
-                        <a class="btn btn-facebook btn-sm col-md-12" asp-action="KlasikSinavNotlandir" asp-route-sinavId="@sinavaGirenKisiler.SinavGuid">Sınav Soruları</a>
+                        @if (sinavaGirenKisiler.SinavTuru == SinavTuru.Klasik)
+                        {
+                            <a class="btn btn-facebook btn-sm col-md-12" asp-action="KlasikSinavNotlandir" asp-route-sinavId="@sinavaGirenKisiler.SinavGuid">Sınav Soruları</a>
+                        }
                     </div>
                 </div>
             </div>

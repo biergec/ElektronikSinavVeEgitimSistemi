@@ -21,10 +21,8 @@ namespace BusinessLayer.SinavGiris
         {
             var kayitliDerslerimGuidIdleri = _unitOfWork.KayitliDerslerimRepository.Get(x => x.OgrenciId == ogrenciId);
 
-
             // Her öğrencinin belirli dersleri olur. Ders listesindeki derse ait sınav varsa sınavlarına ekle
             var genelSinavListesi = _unitOfWork.SinavRepository.GetAll();
-
 
             var girebilecegimSinavlar = new List<AnaSayfaSinavlarimList>();
             foreach (var item in genelSinavListesi)
@@ -37,15 +35,8 @@ namespace BusinessLayer.SinavGiris
 
                     if (!sinavSuresiDolmusMu)
                     {
-                        // bitiş saati başlangıç saatinden büyükse sınava katılmıştır
-                        var baslayanSinavlar =
-                            _unitOfWork.SuresiBaslamisSinavlarRepository.SingleOrDefault(x => x.OgrenciId == ogrenciId && x.SinavId == item.SinavId);
-
-                        if (baslayanSinavlar != null && baslayanSinavlar.OgrenciSinaviBitirmeZamani < baslayanSinavlar.OgrenciSinavaBaslamaZamani && baslayanSinavlar.OgrenciSinavaBaslamaZamani < DateTime.Now)
-                        {
-                            girebilecegimSinavlar.Add(new AnaSayfaSinavlarimList { DersAdi = item.Dersler.DersAdi, SinavTuru = item.SinavTuru, SinavId = item.SinavId, SinavSuresiDakika = item.SinavSuresiDakika });
-                        }
-                        else
+                        // Sinava katılmış mı kontrol et katılmış tekrar giremesin
+                        if (!OgrenciSinaviBitirmisMi(ogrenciId, item))
                         {
                             girebilecegimSinavlar.Add(new AnaSayfaSinavlarimList { DersAdi = item.Dersler.DersAdi, SinavTuru = item.SinavTuru, SinavId = item.SinavId, SinavSuresiDakika = item.SinavSuresiDakika });
                         }
@@ -54,6 +45,17 @@ namespace BusinessLayer.SinavGiris
             }
 
             return girebilecegimSinavlar;
+        }
+
+        private bool OgrenciSinaviBitirmisMi(Guid ogrenciId, EntityLayer.Sinav.Sinav item)
+        {
+            var sinavBilgisi =
+                _unitOfWork.SuresiBaslamisSinavlarRepository.SingleOrDefault(x =>
+                    x.OgrenciId == ogrenciId && x.SinavId == item.SinavId);
+            if (sinavBilgisi != null && sinavBilgisi.OgrenciSinaviBitirmeZamani < DateTime.Now)
+                return true;
+
+            return false;
         }
 
 

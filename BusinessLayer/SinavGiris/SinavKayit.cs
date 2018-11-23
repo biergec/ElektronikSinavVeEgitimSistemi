@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using DAL.UnitOfWork;
 using EntityLayer;
@@ -47,6 +48,7 @@ namespace BusinessLayer.SinavGiris
         }
 
 
+
         public Result KlasikSinavOgrenciSinaviKayit(KlasikSinavSinavKayitViewModel klasikSinavOgrenciCevaplari)
         {
             try
@@ -83,10 +85,54 @@ namespace BusinessLayer.SinavGiris
             }
             catch (Exception e)
             {
-                _logger.LogError("Klasik sinav kaydı başarısız. İstek sahibi -> " + klasikSinavOgrenciCevaplari.OgrenciId + " | Sinav -> "+klasikSinavOgrenciCevaplari.SinavId+" | Detay -> " + e);
+                _logger.LogError("Klasik sinav kaydı başarısız. İstek sahibi -> " + klasikSinavOgrenciCevaplari.OgrenciId + " | Sinav -> " + klasikSinavOgrenciCevaplari.SinavId + " | Detay -> " + e);
                 return new Result { isSuccess = false, Message = "Sınav kaydı başarısız!" };
             }
         }
+
+
+
+        public Result TestSinavOgrenciSinaviKayit(TestSinavSinaviKayitEtViewModel testSinavSinaviKayitEtViewModel)
+        {
+            try
+            {
+                double ogrenciSinavPuani = 0;
+
+                // sınav sonucunu kayıt edebilmek için tabloları birleştirdik
+                var suresiBaslamisSinavlars =
+                    _unitOfWork.SuresiBaslamisSinavlarRepository.IncludeMany(x => x.GirilenTestSinavSonuclaris).SingleOrDefault(x => x.OgrenciId == testSinavSinaviKayitEtViewModel.OgrenciId && x.SinavId == Guid.Parse(testSinavSinaviKayitEtViewModel.SinavId));
+
+                if (suresiBaslamisSinavlars == null)
+                    throw new NullReferenceException("İlgili sinav bulunamadı.");
+
+                var ilgiliTestSinav =
+                    _unitOfWork.TestSinavSorularRepository.IncludeMany(x => x.TestSinav, x => x.TestSinavSoruSiklari).Where(x => x.TestSinav.SinavId == Guid.Parse(testSinavSinaviKayitEtViewModel.SinavId)).ToList();
+
+                double ogrenciSoruBasinaAlacagiPuan = 100 / ilgiliTestSinav.Count();
+                foreach (var item in testSinavSinaviKayitEtViewModel.TestSinavCevaplariList)
+                {
+                    int dogruSoruCevabi = ilgiliTestSinav.FirstOrDefault(x => x.TestSinavSorularId == item.TestSinavSorularId).SoruCevabi;
+
+                    // soru doğru cevaplanmıştır puan ver
+                    if (dogruSoruCevabi == item.SoruCevapSikki)
+                        ogrenciSinavPuani += ogrenciSoruBasinaAlacagiPuan;
+                }
+
+                // puanı bulunan öğrenci puanını kayıt et
+                suresiBaslamisSinavlars.OgrenciSinaviBitirmeZamani = DateTime.Now;
+                suresiBaslamisSinavlars.GirilenTestSinavSonuclaris = new GirilenTestSinavSonuclari { SinavPuani = ogrenciSinavPuani, GirilenTestSinavSonuclariId = Guid.NewGuid() };
+
+                _unitOfWork.SaveChanges();
+                return new Result { isSuccess = true, Message = "Sınav başarılı bir şekilde kayıt edildi." };
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Klasik sinav kaydı başarısız. İstek sahibi -> " + testSinavSinaviKayitEtViewModel.OgrenciId + " | Sinav -> " + testSinavSinaviKayitEtViewModel.SinavId + " | Detay -> " + e);
+                return new Result { isSuccess = false, Message = "Sınav kaydı başarısız!" };
+            }
+        }
+
+
 
     }
 }

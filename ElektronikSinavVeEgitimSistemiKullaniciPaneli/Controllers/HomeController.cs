@@ -97,6 +97,18 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 
 
         [HttpPost, ValidateAntiForgeryToken]
+        public async Task<JsonResult> GirilenTestSinaviniKayitEt(TestSinavSinaviKayitEtViewModel testSinavSinaviKayitEtViewModel)
+        {
+            testSinavSinaviKayitEtViewModel.OgrenciId = Guid.Parse(User.Identity.GetUserId());
+
+            var result = await Task.FromResult(_sinavKayit.TestSinavOgrenciSinaviKayit(testSinavSinaviKayitEtViewModel));
+
+            return new JsonResult(new Result { isSuccess = result.isSuccess, Message = result.Message });
+        }
+
+
+
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<JsonResult> KayitliDersSil(string dersId)
         {
             var result = await
@@ -127,6 +139,9 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 
             return new JsonResult(new Result { Message = result.Message, isSuccess = result.isSuccess });
         }
+
+
+
 
 
         public IActionResult About()

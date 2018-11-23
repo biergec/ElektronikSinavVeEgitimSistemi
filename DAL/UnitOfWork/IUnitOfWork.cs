@@ -21,6 +21,8 @@ namespace DAL.UnitOfWork
 
         IRepository<Dersler> DerslerRepository { get; }
 
+        IRepository<GirilenTestSinavSonuclari> GirilenTestSinavSonuclariRepository { get; }
+
         IRepository<SuresiBaslamisSinavlar> SuresiBaslamisSinavlarRepository { get; }
 
         IRepository<KayitliDerslerim> KayitliDerslerimRepository { get; }

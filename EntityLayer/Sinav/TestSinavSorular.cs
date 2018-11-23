@@ -11,7 +11,7 @@ namespace EntityLayer.Sinav
         public Guid TestSinavSorularId { get; set; }
         public Guid TestSinavId { get; set; }
 
-        public int TestSinavSoruSirasi { get; set; }
+        public int SoruCevabi { get; set; }
         public string TestSinavSorusuMetni { get; set; }
 
         public ICollection<TestSinavSoruSiklari> TestSinavSoruSiklari { get; set; }

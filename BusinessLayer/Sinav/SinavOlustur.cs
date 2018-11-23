@@ -80,7 +80,7 @@ namespace BusinessLayer.Sinav
                         testSinavSorulariSiklariList.Add(new TestSinavSoruSiklari { SoruSikki = (i + 1), SoruSikMetni = testSinavSorulari.SoruTemplate[m].SoruSiklari[i], TestSinavSoruSiklariId = Guid.NewGuid() });
                     }
 
-                    var testSinavSorularTablosu = new TestSinavSorular { TestSinavSoruSiklari = testSinavSorulariSiklariList, TestSinavSoruSirasi = 0, TestSinavSorusuMetni = testSinavSorulari.SoruTemplate[m].SoruText, TestSinavSorularId = Guid.NewGuid() };
+                    var testSinavSorularTablosu = new TestSinavSorular { TestSinavSoruSiklari = testSinavSorulariSiklariList, SoruCevabi = Convert.ToInt32(testSinavSorulari.SoruTemplate[m].SoruDogruSik), TestSinavSorusuMetni = testSinavSorulari.SoruTemplate[m].SoruText, TestSinavSorularId = Guid.NewGuid() };
 
 
                     sinavSorularTablosuTumSorularList.Add(testSinavSorularTablosu);
