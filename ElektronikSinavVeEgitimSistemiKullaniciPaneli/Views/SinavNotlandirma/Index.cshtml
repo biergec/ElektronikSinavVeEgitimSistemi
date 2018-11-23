@@ -1,0 +1,39 @@
+﻿@using EntityLayer.Sinav
+
+@{
+    ViewData["Title"] = "Ders Listesi";
+}
+
+<div class="row">
+    <div class="card card-nav-tabs">
+        <div class="card-header card-header-success">
+            <b>Sınav Listem</b>
+        </div>
+        <div class="card-body">
+            Sınav listesinden ilgili sınavı seçerek sınava giren kişileri görebilir, notlandırabilirsiniz. Ayrıca kişilerin notlarını da görmeniz mümkün.
+        </div>
+    </div>
+</div>
+
+<br />
+
+@foreach (var item in (List<Sinav>)ViewBag.SinavListesi)
+{
+    <div class="row">
+        <div class="card card-nav-tabs">
+            <div class="card-header card-header-warning">
+                <div class="row">
+                    <div class="col-md-10">
+                        <b>@item.Dersler.DersAdi</b> | @item.SinavTuru | Oluşturma : @item.SinavEklenmeTarihi | Süre : @item.SinavSuresiDakika dakika
+                    </div>
+                    <div class="col-md-2">
+                        <a class="btn btn-facebook btn-sm col-md-12" asp-action="SinavaGirenKisiler" asp-route-sinavId="@item.SinavId">Sınava Girenleri Gör</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+            </div>
+        </div>
+    </div>
+}
+

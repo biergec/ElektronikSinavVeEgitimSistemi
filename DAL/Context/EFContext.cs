@@ -27,6 +27,8 @@ namespace DAL.Context
         public DbSet<Dersler> Derslers { get; set; }
         public DbSet<SuresiBaslamisSinavlar> SuresiBaslamisSinavlars { get; set; }
         public DbSet<KayitliDerslerim> KayitliDerslerims { get; set; }
+        public DbSet<GirilenKlasikSinavKayit> GirilenKlasikSinavKayits { get; set; }
+        public DbSet<KlasikSinavSinavSoruCevap> KlasikSinavSinavSoruCevaps { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -63,6 +65,16 @@ namespace DAL.Context
             builder.Entity<Dersler>()
                 .HasMany(x => x.KayitliDerslerim)
                 .WithOne(x => x.Dersler).HasForeignKey(x => x.DerslerId).OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<SuresiBaslamisSinavlar>()
+                .HasMany(x => x.GirilenKlasikSinavKayits)
+                .WithOne(x => x.SuresiBaslamisSinavlar).HasForeignKey(x => x.SuresiBaslamisSinavlarId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+             builder.Entity<GirilenKlasikSinavKayit>()
+                .HasMany(x => x.KlasikSinavSinavSoruCevaps)
+                .WithOne(x => x.GirilenKlasikSinavKayit).HasForeignKey(x => x.GirilenKlasikSinavKayitId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

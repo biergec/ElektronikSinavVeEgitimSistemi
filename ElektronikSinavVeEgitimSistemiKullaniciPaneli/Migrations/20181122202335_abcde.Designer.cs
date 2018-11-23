@@ -4,14 +4,16 @@ using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
 {
     [DbContext(typeof(EfContext))]
-    partial class EfContextModelSnapshot : ModelSnapshot
+    [Migration("20181122202335_abcde")]
+    partial class abcde
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,7 +32,8 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
 
                     b.HasKey("GirilenKlasikSinavKayitId");
 
-                    b.HasIndex("SuresiBaslamisSinavlarId");
+                    b.HasIndex("SuresiBaslamisSinavlarId")
+                        .IsUnique();
 
                     b.ToTable("GirilenKlasikSinavKayits");
                 });
@@ -394,8 +397,8 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Migrations
             modelBuilder.Entity("EntityLayer.BaslayanSinavlar.GirilenKlasikSinavKayit", b =>
                 {
                     b.HasOne("EntityLayer.BaslayanSinavlar.SuresiBaslamisSinavlar", "SuresiBaslamisSinavlar")
-                        .WithMany("GirilenKlasikSinavKayits")
-                        .HasForeignKey("SuresiBaslamisSinavlarId")
+                        .WithOne("GirilenKlasikSinavKayits")
+                        .HasForeignKey("EntityLayer.BaslayanSinavlar.GirilenKlasikSinavKayit", "SuresiBaslamisSinavlarId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

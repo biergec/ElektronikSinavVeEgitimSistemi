@@ -25,6 +25,9 @@ namespace DAL.UnitOfWork
 
         IRepository<KayitliDerslerim> KayitliDerslerimRepository { get; }
 
+        IRepository<GirilenKlasikSinavKayit> GirilenKlasikSinavKayitRepository { get; }
+        IRepository<KlasikSinavSinavSoruCevap> KlasikSinavSinavSoruCevapRepository { get; }
+
         void SaveChanges();
     }
 }

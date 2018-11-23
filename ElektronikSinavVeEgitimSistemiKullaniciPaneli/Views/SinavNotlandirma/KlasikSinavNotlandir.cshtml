@@ -1,0 +1,53 @@
+﻿@using EntityLayer.EgitmenSinavBilgileri
+@model EntityLayer.BaslayanSinavlar.SinavNotlandirma
+@{
+    ViewData["Title"] = "KlasikSinavNotlandir";
+}
+
+<div class="card card-nav-tabs">
+    <div class="card-header card-header-warning">
+        <b>Klasik Sınav Notlandırma</b>
+    </div>
+    <div class="card-body">
+    </div>
+</div>
+
+<br />
+
+@foreach (var item2 in (List<EntityLayer.BaslayanSinavlar.GirilenKlasikSinavKayit>)ViewBag.SinavSorulari)
+{
+    foreach (var soruCevap in item2.KlasikSinavSinavSoruCevaps)
+    {
+        <div class="card card-nav-tabs">
+            <div class="card-body">
+                <b> Soru : </b> @soruCevap.SoruText
+                <hr />
+                @soruCevap.SoruCevapText
+            </div>
+        </div>
+    }
+}
+<form method="post" asp-action="KlasikSinavNotlandir">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-nav-tabs">
+                <div class="card-body">
+                    <input asp-for="sinavNotu" class="form-control" type="number" placeholder="Sınav notunu giriniz" min="0" max="100" />
+                </div>
+            </div>
+        </div>
+        @{
+            string ogrenciIdd = ViewBag.SinavSorulari[0].SuresiBaslamisSinavlar.OgrenciId.ToString();
+            string sinavIdd = ViewBag.SinavSorulari[0].SuresiBaslamisSinavlar.SinavId.ToString();
+        }
+        <div class="col-md-12">
+            <a class="btn btn-facebook btn-sm col-md-12" asp-action="KlasikSinavNotlandir" asp-route-ogrenciId="@ogrenciIdd" asp-route-sinavId="@sinavIdd" asp-route-sinavNotu="20">Sınavı Notlandır</a>
+        </div>
+    </div>
+</form>
+
+<script>
+    function sinavNotuHesapla() {
+        return $("sinavNotu").val();
+    }
+</script>

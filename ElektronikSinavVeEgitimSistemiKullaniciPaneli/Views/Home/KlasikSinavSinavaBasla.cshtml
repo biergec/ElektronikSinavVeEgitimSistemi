@@ -1,10 +1,14 @@
-﻿@model List<EntityLayer.Sinav.SinavSorulariGoruntuleme>
+﻿@using Microsoft.AspNet.Identity
+@model List<EntityLayer.Sinav.SinavSorulariGoruntuleme>
 
 @{
-    ViewData["Title"] = Model[0].DersAdi +" Dersi Sınav Soruları";
+    ViewData["Title"] = Model[0].DersAdi + " Dersi Sınav Soruları";
 }
 
 <script src="~/js/My/KlasikSinavSinavaBasla.js"></script>
+
+<input type="hidden" value="@Model[0].KlasikSinav[0].SinavId" id="klasikSinavId"/>
+<input type="hidden" value="@Model[0].KlasikSinav[0].KlasikSinavSorulars.Count" id="soruSayisi"/>
 
 <div class="card card-nav-tabs">
     <div class="card-header card-header-danger">
@@ -21,19 +25,33 @@
         </div>
     </div>
 </div>
+
+@{  int soruSayisi = 1;
+    string soruMetni = "";
+    string inputSoruCevap = "";
+}
+
 @foreach (var item2 in Model[0].KlasikSinav[0].KlasikSinavSorulars)
 {
-<div class="card card-nav-tabs">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-12">
-                @item2.SoruMetni
-                <hr />
-                <textarea placeholder="Cevabınızı bu alana yazınız" cols="100" rows="10"></textarea>
+    {
+        soruMetni = "soruMetni" + soruSayisi;
+        inputSoruCevap = "inputSoruCevap" + soruSayisi;
+    }
+    <div class="card card-nav-tabs">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="@soruMetni">
+                        @item2.SoruMetni
+                    </div>
+                    <hr />
+                    <textarea id="@inputSoruCevap" placeholder="Cevabınızı bu alana yazınız" cols="100" rows="10"></textarea>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    { soruSayisi += 1; }
 }
 <hr />
-<a class="btn btn-facebook btn-lg col-md-12" style="color: white">Sınavı Kayıt Et</a>
+<a class="btn btn-facebook btn-lg col-md-12" style="color: white" onclick="SinavKayit()">Sınavı Kayıt Et</a>

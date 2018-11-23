@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using EntityLayer.BaslayanSinavlar;
 using EntityLayer.Ders;
+using EntityLayer.Login;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using EntityLayer.Sinav;
 
@@ -18,7 +19,7 @@ namespace EntityLayer.Sinav
         public Guid SinavSahibi { get; set; }
         public DateTime SinavEklenmeTarihi { get; set; }
         public bool SinavAktiflikDurumu { get; set; }
-        
+
         [Range(0,1000000000000000000)]
         public int SinavSuresiDakika { get; set; }
 

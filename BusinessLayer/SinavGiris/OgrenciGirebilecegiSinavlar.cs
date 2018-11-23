@@ -37,7 +37,18 @@ namespace BusinessLayer.SinavGiris
 
                     if (!sinavSuresiDolmusMu)
                     {
-                        girebilecegimSinavlar.Add(new AnaSayfaSinavlarimList { DersAdi = item.Dersler.DersAdi, SinavTuru = item.SinavTuru, SinavId = item.SinavId, SinavSuresiDakika = item.SinavSuresiDakika });
+                        // bitiş saati başlangıç saatinden büyükse sınava katılmıştır
+                        var baslayanSinavlar =
+                            _unitOfWork.SuresiBaslamisSinavlarRepository.SingleOrDefault(x => x.OgrenciId == ogrenciId && x.SinavId == item.SinavId);
+
+                        if (baslayanSinavlar != null && baslayanSinavlar.OgrenciSinaviBitirmeZamani < baslayanSinavlar.OgrenciSinavaBaslamaZamani && baslayanSinavlar.OgrenciSinavaBaslamaZamani < DateTime.Now)
+                        {
+                            girebilecegimSinavlar.Add(new AnaSayfaSinavlarimList { DersAdi = item.Dersler.DersAdi, SinavTuru = item.SinavTuru, SinavId = item.SinavId, SinavSuresiDakika = item.SinavSuresiDakika });
+                        }
+                        else
+                        {
+                            girebilecegimSinavlar.Add(new AnaSayfaSinavlarimList { DersAdi = item.Dersler.DersAdi, SinavTuru = item.SinavTuru, SinavId = item.SinavId, SinavSuresiDakika = item.SinavSuresiDakika });
+                        }
                     }
                 }
             }

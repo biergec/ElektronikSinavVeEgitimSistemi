@@ -1,0 +1,40 @@
+﻿@model List<EntityLayer.EgitmenSinavBilgileri.SinavaGirenKisiler>
+@{
+    ViewData["Title"] = "Sınava Giren Kişilerr";
+}
+
+<div class="row">
+    <div class="card card-nav-tabs">
+        <div class="card-header card-header-success">
+            <b>Sınava Giren Kişiler</b>
+        </div>
+        <div class="card-body">
+            Sınava giren tüm kişiler listelenmektedir.
+        </div>
+    </div>
+</div>
+
+<br />
+
+@foreach (var sinavaGirenKisiler in Model)
+{
+    <div class="row">
+        <div class="card card-nav-tabs">
+            <div class="card-header card-header-warning">
+                NO : @sinavaGirenKisiler.OkulNumarasi | @sinavaGirenKisiler.AdSoyad
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-10">
+                       Aldığı Not : <b> @sinavaGirenKisiler.AldigiNot</b> 
+                    </div>
+                    <div class="col-md-12">
+                        <a class="btn btn-facebook btn-sm col-md-12" asp-action="KlasikSinavNotlandir" asp-route-sinavId="@sinavaGirenKisiler.SinavGuid">Sınav Soruları</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+

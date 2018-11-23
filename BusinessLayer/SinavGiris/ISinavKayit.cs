@@ -1,10 +1,12 @@
 ﻿using System;
 using EntityLayer;
+using EntityLayer.BaslayanSinavlar;
 
 namespace BusinessLayer.SinavGiris
 {
     public interface ISinavKayit
     {
-        Result SinavBaslangicKayit(Guid sinavId, Guid ogrenciId);
+        Result SinavBaslangicBilgisiKayit(Guid sinavId, Guid ogrenciId);
+        Result KlasikSinavOgrenciSinaviKayit(KlasikSinavSinavKayitViewModel klasikSinavOgrenciCevaplari);
     }
 }

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using ElektronikSinavVeEgitimSistemiKullaniciPaneli.Models;
 using Microsoft.AspNetCore.Authorization;
 using EntityLayer;
+using EntityLayer.BaslayanSinavlar;
 using EntityLayer.Sinav;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -69,7 +70,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         {
             // Sayfaya yönlendirmeden önce sınav başlangıcını kaydet 
             var sinavBaslamaKayit =
-                _sinavKayit.SinavBaslangicKayit(Guid.Parse(sinavId), Guid.Parse(User.Identity.GetUserId()));
+                _sinavKayit.SinavBaslangicBilgisiKayit(Guid.Parse(sinavId), Guid.Parse(User.Identity.GetUserId()));
             if (!sinavBaslamaKayit.isSuccess)
                 return Index();
 
@@ -84,7 +85,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         {
             // Sayfaya yönlendirmeden önce sınav başlangıcını kaydet 
             var sinavBaslamaKayit =
-                _sinavKayit.SinavBaslangicKayit(Guid.Parse(sinavId), Guid.Parse(User.Identity.GetUserId()));
+                _sinavKayit.SinavBaslangicBilgisiKayit(Guid.Parse(sinavId), Guid.Parse(User.Identity.GetUserId()));
             if (!sinavBaslamaKayit.isSuccess)
                 return Index();
 
@@ -112,6 +113,17 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
             var result = await
                 Task.FromResult(_kayitliDerslerim.DersKayit(Guid.Parse(dersId), dersKayitAnahtari,
                     Guid.Parse(User.Identity.GetUserId())));
+
+            return new JsonResult(new Result { Message = result.Message, isSuccess = result.isSuccess });
+        }
+
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<JsonResult> KlasikSinavSinavKayit(KlasikSinavSinavKayitViewModel klasikSinavSinavKayit)
+        {
+            klasikSinavSinavKayit.OgrenciId = Guid.Parse(User.Identity.GetUserId());
+            var result = await
+                Task.FromResult(_sinavKayit.KlasikSinavOgrenciSinaviKayit(klasikSinavSinavKayit));
 
             return new JsonResult(new Result { Message = result.Message, isSuccess = result.isSuccess });
         }

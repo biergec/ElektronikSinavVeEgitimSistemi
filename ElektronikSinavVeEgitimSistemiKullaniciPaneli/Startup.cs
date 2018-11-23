@@ -78,6 +78,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
             services.AddScoped<IOgrenciGirebilecegiSinavlar, OgrenciGirebilecegiSinavlar>();
             services.AddScoped<ISinavBilgileri, SinavBilgileri>();
             services.AddScoped<ISinavKayit, SinavKayit>();
+            services.AddScoped<ISinavNotlandir, SinavNotlandir>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
