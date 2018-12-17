@@ -1,0 +1,105 @@
+﻿@using EntityLayer.CanliYayin
+@model EntityLayer.CanliYayin.CanliYayinDetaylari
+@{
+    ViewData["Title"] = "CanliYayinDetaylari";
+}
+
+@{
+    var yayinDurumu = Model.CanliYayinAktifMi == true ? "Aktif" : "Pasif";
+}
+
+<script src="~/js/My/CanliYayinDetaylari.js"></script>
+
+<div class="row">
+    <div class="card card-nav-tabs">
+        <div class="card-header card-header-success">
+            <b>Canlı Yayın Detayları : Yayın @yayinDurumu</b>
+        </div>
+        <div class="card-body">
+            @if (Model.CanliYayinAktifMi)
+            {
+                <button  class="btn btn-danger" onclick="CanliYayinPasifYap('@Model.CanliYayinId.ToString()')">Canlı Yayını Sonlandır</button>
+            }
+            else
+            {
+                <button  class="btn btn-danger" onclick="CanliYayinAktifYap('@Model.CanliYayinId.ToString()')">Canlı Yayını Aktif Et</button>
+            }
+            
+            <button class="btn btn-danger" onclick="CanliYayiniSil('@Model.CanliYayinId.ToString()')">Canlı Yayını Sil</button>
+
+            @Html.AntiForgeryToken()
+            <br />
+            <b>Oluşturduğunuz canlı yayını aktif etmeden diğer kişiler tarafından erişilemez.</b>
+        </div>
+    </div>
+</div>
+
+<br />
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-12 center-block">
+            @{
+                string idx = "https://www.youtube.com/embed/" + Model.CanliYayinYayinId + "?controls=0;";
+
+                <iframe width="560" height="315" src="@idx" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            }
+        </div>
+    </div>
+
+    <br />
+    <hr />
+    <br />
+    
+    <p>Dosya Yükleme</p>
+    <div class="row">
+        <form method="post" enctype="multipart/form-data" asp-action="UploadFiles">
+            <div>
+                <p>Upload one or more files using this form:</p>
+                <input type="file" name="files" multiple/>
+            </div>
+            <div>
+                <input type="submit" value="Upload" />
+            </div>
+        </form>
+    </div>
+
+    <br />
+    <hr />
+    <br />
+
+
+    @*Yoklama listesi*@
+    <div class="row">
+
+        <div class="card card-nav-tabs">
+            <div class="card-header card-header-warning">
+                <b>Ders Yoklama Listesi</b>
+            </div>
+            <div class="card-body">
+
+            </div>
+        </div>
+
+        @if (ViewBag.YoklamaListesi is List<CanliYayinYoklama>)
+        {
+            foreach (var item in ViewBag.YoklamaListesi as List<CanliYayinYoklama>)
+            {
+                <div class="card card-nav-tabs">
+                    <div class="card-body">
+                        <b>@item.OgrenciNumarasi</b> - <b>@item.OgrenciAdSoyad</b>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-danger " role="alert">
+                Derse katılan kişi bulunamadı.
+            </div>
+        }
+    </div>
+
+</div>
+

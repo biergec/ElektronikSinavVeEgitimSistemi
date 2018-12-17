@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DAL.Repository;
 using EntityLayer.BaslayanSinavlar;
+using EntityLayer.CanliYayin;
 using EntityLayer.Ders;
 using EntityLayer.Sinav;
 using EntityLayer.Sinav;
@@ -29,6 +30,10 @@ namespace DAL.UnitOfWork
 
         IRepository<GirilenKlasikSinavKayit> GirilenKlasikSinavKayitRepository { get; }
         IRepository<KlasikSinavSinavSoruCevap> KlasikSinavSinavSoruCevapRepository { get; }
+
+        IRepository<CanliYayin> CanliYayinRepository { get; }
+        IRepository<CanliYayinDokumanlari> CanliYayinDokumanlariRepository { get; }
+        IRepository<CanliYayinaKatilanlar> CanliYayinaKatilanlarRepository { get; }
 
         void SaveChanges();
     }

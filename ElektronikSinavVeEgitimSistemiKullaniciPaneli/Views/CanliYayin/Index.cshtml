@@ -1,0 +1,42 @@
+﻿@using EntityLayer.Sinav
+@model List<EntityLayer.CanliYayin.CanliYayinDetaylari>
+@{
+    ViewData["Title"] = "Canlı Yayınlarım";
+}
+
+
+<div class="row">
+    <div class="card card-nav-tabs">
+        <div class="card-header card-header-success">
+            <b>Oluşturulan Canlı Yayınlar</b>
+        </div>
+        <div class="card-body">
+            Oluşturduğunu tüm canlı yayınlar listelenmektedir.
+        </div>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header card-header-text card-header-primary">
+                    <div class="card-text">
+                        <h4 class="card-title">@item.CanliYayinDersAdi</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    Canlı yayın durumu : <b>@item.CanliYayinAktifMi</b>
+                    <br />
+                    <a class="btn btn-facebook btn-sm col-md-12" asp-action="CanliYayinDetaylari" asp-route-canliYayinGuid="@item.CanliYayinId">Yayın Detayları</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+

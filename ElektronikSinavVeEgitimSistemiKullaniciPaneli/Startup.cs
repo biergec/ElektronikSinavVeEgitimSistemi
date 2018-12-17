@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.CanliYayin;
 using BusinessLayer.DersIslemleri;
 using BusinessLayer.Login;
 using BusinessLayer.Sinav;
@@ -79,6 +80,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
             services.AddScoped<ISinavBilgileri, SinavBilgileri>();
             services.AddScoped<ISinavKayit, SinavKayit>();
             services.AddScoped<ISinavNotlandir, SinavNotlandir>();
+            services.AddScoped<ICanliYayinIslemleri, CanliYayinIslemleri>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

@@ -4,6 +4,7 @@ using System.Text;
 using DAL.Context;
 using DAL.Repository;
 using EntityLayer.BaslayanSinavlar;
+using EntityLayer.CanliYayin;
 using EntityLayer.Ders;
 using EntityLayer.Sinav;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -25,10 +26,37 @@ namespace DAL.UnitOfWork
         private IRepository<GirilenKlasikSinavKayit> _girilenKlasikSinavKayitRepository;
         private IRepository<KlasikSinavSinavSoruCevap> _klasikSinavSinavSoruCevapRepository;
         private IRepository<GirilenTestSinavSonuclari> _girilenTestSinavSonuclariRepository;
+        private IRepository<CanliYayin> _canliYayinRepository;
+        private IRepository<CanliYayinDokumanlari> _canliYayinDokumanlariRepository;
+        private IRepository<CanliYayinaKatilanlar> _canliYayinaKatilanlarRepository;
 
         public UnitOfWork(EfContext context)
         {
             Context = context;
+        }
+
+        public IRepository<CanliYayinaKatilanlar> CanliYayinaKatilanlarRepository
+        {
+            get
+            {
+                return _canliYayinaKatilanlarRepository = _canliYayinaKatilanlarRepository ?? new Repository<CanliYayinaKatilanlar>(Context);
+            }
+        }
+
+        public IRepository<CanliYayinDokumanlari> CanliYayinDokumanlariRepository
+        {
+            get
+            {
+                return _canliYayinDokumanlariRepository = _canliYayinDokumanlariRepository ?? new Repository<CanliYayinDokumanlari>(Context);
+            }
+        }
+
+        public IRepository<CanliYayin> CanliYayinRepository
+        {
+            get
+            {
+                return _canliYayinRepository = _canliYayinRepository ?? new Repository<CanliYayin>(Context);
+            }
         }
 
         public IRepository<Sinav> SinavRepository

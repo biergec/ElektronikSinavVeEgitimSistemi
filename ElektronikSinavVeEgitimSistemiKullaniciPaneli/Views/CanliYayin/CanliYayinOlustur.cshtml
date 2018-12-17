@@ -1,0 +1,34 @@
+﻿@model EntityLayer.CanliYayin.CanliYayinOlusturViewModel
+@{
+    ViewData["Title"] = "CanliYayinOlustur";
+}
+
+<div class="row">
+    <div class="card card-nav-tabs">
+        <div class="card-header card-header-success">
+            <b>Canlı Yayın Oluştur</b>
+        </div>
+        <div class="card-body">
+            Oluşturduğunu tüm canlı yayınlar listelenmektedir.
+        </div>
+    </div>
+</div>
+
+<br />
+
+<form action="/" method="post">
+    <div class="form-group">
+        <label for="dersListesi">Ders Seçiniz</label>
+        <select asp-items="@((IEnumerable<SelectListItem>) ViewBag.DersListesi)" id="dersListesi" class="form-control" asp-for="DersId"></select>
+        <small id="dersHelp" class="form-text text-muted">Canlı yayın oluşturmak istesiğiniz dersi seçiniz.</small>
+    </div>
+    <br />
+    <div class="form-group">
+        <label  class="bmd-form-group m-b-10">Youtube Canlı Yayın Kodu</label>
+        <input type="text" placeholder="27pxPSrr-vs" class="form-control" asp-for="YayinKodu" id="youtubeYayinId">
+        <span asp-validation-for="YayinKodu"></span>
+    </div>
+    <button asp-action="CanliYayinOlustur" type="submit" class="btn btn-primary">Canlı Yayın Oluştur</button>
+    
+    @Html.AntiForgeryToken()
+</form>
