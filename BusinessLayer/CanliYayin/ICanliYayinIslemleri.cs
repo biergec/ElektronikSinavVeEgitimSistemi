@@ -13,8 +13,10 @@ namespace BusinessLayer.CanliYayin
         CanliYayinDetaylari CanliYayinDetaylari(Guid yayinId);
         List<CanliYayinDetaylari> OlusturdugumCanliYayinlar(Guid userId);
         Result CanliYayinBaslat(Guid yayinId);
-        Result CanliYayinDosyaEkle();
         List<CanliYayinYoklama> CanliYayinYoklamaListesi(Guid canliYayinId);
         bool CanliYayiniSil(Guid yayinId);
+        bool CanliYayinUploadDosya(List<UploadFileInfo> dosyaFileInfos, Guid sinavId);
+        List<CanliYayinDokumanlari> CanliYayinDokumanlariListele(Guid canliYayinId);
+        bool CanliYayinDokumanSil(Guid dokumanlarIdGuid);
     }
 }

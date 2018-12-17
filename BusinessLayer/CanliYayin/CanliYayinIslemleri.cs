@@ -79,7 +79,13 @@ namespace BusinessLayer.CanliYayin
 
                 return new CanliYayinDetaylari
                 {
-                    CanliYayinAktifMi = seciliCanliYayin.CanliYayinAktifMi, CanliYayinId = seciliCanliYayin.CanliYayinId, CanliYayinDersId = seciliCanliYayin.CanliYayinDersId, CanliYayinYayinId = seciliCanliYayin.CanliYayinYayinId, CanliYayinBaslamaZamani = seciliCanliYayin.CanliYayinBaslamaZamani, CanliYayinBitisZamani = seciliCanliYayin.CanliYayinBitisZamani, CanliYayinDersAdi = dersAdi, 
+                    CanliYayinAktifMi = seciliCanliYayin.CanliYayinAktifMi,
+                    CanliYayinId = seciliCanliYayin.CanliYayinId,
+                    CanliYayinDersId = seciliCanliYayin.CanliYayinDersId,
+                    CanliYayinYayinId = seciliCanliYayin.CanliYayinYayinId,
+                    CanliYayinBaslamaZamani = seciliCanliYayin.CanliYayinBaslamaZamani,
+                    CanliYayinBitisZamani = seciliCanliYayin.CanliYayinBitisZamani,
+                    CanliYayinDersAdi = dersAdi,
                 };
             }
             catch (Exception e)
@@ -89,9 +95,37 @@ namespace BusinessLayer.CanliYayin
             }
         }
 
-        public Result CanliYayinDosyaEkle()
+        public List<CanliYayinDokumanlari> CanliYayinDokumanlariListele(Guid canliYayinId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return _unitOfWork.CanliYayinDokumanlariRepository.Get(x => x.CanliYayinId == canliYayinId).ToList();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Canlı yayın oluşturma hatası - > " + e);
+                return null;
+            }
+        }
+
+        public bool CanliYayinDokumanSil(Guid dokumanlarIdGuid)
+        {
+            try
+            {
+                var seciliDokuman =
+                    _unitOfWork.CanliYayinDokumanlariRepository.SingleOrDefault(x =>
+                        x.CanliYayinDokumanlariId == dokumanlarIdGuid);
+
+                _unitOfWork.CanliYayinDokumanlariRepository.Remove(seciliDokuman);
+                _unitOfWork.SaveChanges();
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Canlı yayın dokuman silme hatası - > " + e);
+                return false;
+            }
         }
 
         public bool CanliYayiniSil(Guid yayinId)
@@ -101,6 +135,7 @@ namespace BusinessLayer.CanliYayin
                 var seciliCanliYayin = _unitOfWork.CanliYayinRepository.SingleOrDefault(x => x.CanliYayinId == yayinId);
 
                 _unitOfWork.CanliYayinRepository.Remove(seciliCanliYayin);
+                _unitOfWork.SaveChanges();
 
                 return true;
             }
@@ -133,6 +168,31 @@ namespace BusinessLayer.CanliYayin
             {
                 _logger.LogError("Canlı yayın oluşturma hatası - > " + e);
                 return new Result { isSuccess = false, Message = "Canli Yayın Oluşturma Hatası" };
+            }
+        }
+
+
+
+        public bool CanliYayinUploadDosya(List<UploadFileInfo> dosyaFileInfos, Guid canliYayinId)
+        {
+            try
+            {
+                var canliYayinDokumanlari = new List<CanliYayinDokumanlari>();
+
+                foreach (var uploadFileInfo in dosyaFileInfos)
+                {
+                    canliYayinDokumanlari.Add(new CanliYayinDokumanlari { CanliYayinDokumanlariId = Guid.NewGuid(), CanliYayinId = canliYayinId, DokumanAdi = uploadFileInfo.DosyaAdi, DokumanEklenmeTarihi = DateTime.Now, DokumanKayitPath = uploadFileInfo.DosyaYolu });
+                }
+
+                _unitOfWork.CanliYayinDokumanlariRepository.AddRange(canliYayinDokumanlari);
+                _unitOfWork.SaveChanges();
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Canlı yayın dosya yükleme hatası - > " + e);
+                return false;
             }
         }
 

@@ -73,6 +73,9 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 
             ViewBag.YoklamaListesi = _canliYayinIslemleri.CanliYayinYoklamaListesi(Guid.Parse(canliYayinGuid)).OrderBy(x => x.OgrenciNumarasi);
 
+            ViewBag.CanliYayinDokumanlari =
+                _canliYayinIslemleri.CanliYayinDokumanlariListele(Guid.Parse(canliYayinGuid));
+
             return View(canliYayinDetaylari);
         }
 
@@ -89,47 +92,72 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         public JsonResult CanliYayinSonlandir(string canliYayinGuid)
         {
             _canliYayinIslemleri.CanliYayinBitir(Guid.Parse(canliYayinGuid));
-            return new JsonResult(new Result { isSuccess = true, Data = canliYayinGuid });;
+            return new JsonResult(new Result { isSuccess = true, Data = canliYayinGuid }); ;
         }
 
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> UploadFiles(List<IFormFile> files)
+        public async Task<IActionResult> UploadFiles(List<IFormFile> files, string canliYayinId)
         {
-            long size = files.Sum(f => f.Length);
+            if (files.Count == 0 || canliYayinId == null)
+            {
+                return RedirectToAction("CanliYayinDetaylari", "CanliYayin", new { canliYayinGuid = canliYayinId });
+            }
 
-            // full path to file in temp location
-            var filePath = Path.GetTempFileName();
+            var canliYayinDosyalari = new List<UploadFileInfo>();
+            long size = files.Sum(f => f.Length);
 
             foreach (var formFile in files)
             {
+                var filePath = Path.Combine(
+                    Directory.GetCurrentDirectory(), "wwwroot\\images\\upload",
+                    GetUniqueFileName(formFile.FileName.Trim()));
+
                 if (formFile.Length > 0)
                 {
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         await formFile.CopyToAsync(stream);
+                        canliYayinDosyalari.Add(new UploadFileInfo { DosyaAdi = formFile.FileName.Trim(), DosyaYolu = filePath });
                     }
                 }
             }
 
-            // process uploaded files
-            // Don't rely on or trust the FileName property without validation.
+            _canliYayinIslemleri.CanliYayinUploadDosya(canliYayinDosyalari, Guid.Parse(canliYayinId));
 
-            return Ok(new { count = files.Count, size, filePath});
+            return RedirectToAction("CanliYayinDetaylari", "CanliYayin", new { canliYayinGuid = canliYayinId });
         }
 
 
-          [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult CanliYayiniYuklenenDosyayiSil(string dosyaDokumanId, string canliYayinGuid)
+        {
+            var sonuc = _canliYayinIslemleri.CanliYayinDokumanSil(Guid.Parse(dosyaDokumanId));
+            return RedirectToAction("CanliYayinDetaylari", "CanliYayin", new { canliYayinGuid = canliYayinGuid });
+        }
+
+
+        private string GetUniqueFileName(string fileName)
+        {
+            fileName = Path.GetFileName(fileName);
+            return Path.GetFileNameWithoutExtension(fileName)
+                    + "_"
+                    + Guid.NewGuid().ToString().Substring(0, 4)
+                    + Path.GetExtension(fileName);
+        }
+
+
+        [HttpPost, ValidateAntiForgeryToken]
         public IActionResult CanliYayiniSil(string canliYayinGuid)
         {
             var sonuc = _canliYayinIslemleri.CanliYayiniSil(Guid.Parse(canliYayinGuid));
             if (sonuc)
             {
-                return new JsonResult(new Result { isSuccess = true });;
+                return new JsonResult(new Result { isSuccess = true }); ;
             }
             else
             {
-                return new JsonResult(new Result { isSuccess = true, Data = canliYayinGuid });;
+                return new JsonResult(new Result { isSuccess = true, Data = canliYayinGuid }); ;
             }
         }
 

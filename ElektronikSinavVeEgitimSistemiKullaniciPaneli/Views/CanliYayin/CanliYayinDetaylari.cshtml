@@ -18,13 +18,13 @@
         <div class="card-body">
             @if (Model.CanliYayinAktifMi)
             {
-                <button  class="btn btn-danger" onclick="CanliYayinPasifYap('@Model.CanliYayinId.ToString()')">Canlı Yayını Sonlandır</button>
+                <button class="btn btn-danger" onclick="CanliYayinPasifYap('@Model.CanliYayinId.ToString()')">Canlı Yayını Sonlandır</button>
             }
             else
             {
-                <button  class="btn btn-danger" onclick="CanliYayinAktifYap('@Model.CanliYayinId.ToString()')">Canlı Yayını Aktif Et</button>
+                <button class="btn btn-danger" onclick="CanliYayinAktifYap('@Model.CanliYayinId.ToString()')">Canlı Yayını Aktif Et</button>
             }
-            
+
             <button class="btn btn-danger" onclick="CanliYayiniSil('@Model.CanliYayinId.ToString()')">Canlı Yayını Sil</button>
 
             @Html.AntiForgeryToken()
@@ -51,17 +51,52 @@
     <br />
     <hr />
     <br />
+
+
+
+
+    @if (ViewBag.CanliYayinDokumanlari as List<CanliYayinDokumanlari> != null)
+    {
+        <div class="row">
+            @foreach (var item in ViewBag.CanliYayinDokumanlari as List<CanliYayinDokumanlari>)
+            {
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header card-header-text card-header-primary">
+                            <div class="card-text">
+                                <h4 class="card-title">@item.DokumanAdi</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            Eklenme Zamanı : <b>@item.DokumanEklenmeTarihi</b>
+                            <br />
+                            <form asp-action="CanliYayiniYuklenenDosyayiSil" asp-route-canliYayinGuid="@item.CanliYayinId" asp-route-dosyaDokumanId="@item.CanliYayinDokumanlariId.ToString()" method="post">
+                                
+                                <button type="submit" class="btn btn-facebook btn-sm col-md-12">Dokumanı Sil</button>
+
+                            </form>
+                           
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
     
-    <p>Dosya Yükleme</p>
+    <br />
+    <hr />
+    <br />
+
     <div class="row">
-        <form method="post" enctype="multipart/form-data" asp-action="UploadFiles">
+        <form method="post" enctype="multipart/form-data" asp-route-canliYayinId="@Model.CanliYayinId.ToString()" asp-action="UploadFiles">
             <div>
-                <p>Upload one or more files using this form:</p>
-                <input type="file" name="files" multiple/>
+                <p>Yüklemek istediğiniz dosya/dosları seçiniz</p>
+                <input type="file" name="files" class="btn btn-block" multiple />
             </div>
             <div>
-                <input type="submit" value="Upload" />
+                <input type="submit" class="btn btn-block" value="Yükle" />
             </div>
+            @Html.AntiForgeryToken()
         </form>
     </div>
 

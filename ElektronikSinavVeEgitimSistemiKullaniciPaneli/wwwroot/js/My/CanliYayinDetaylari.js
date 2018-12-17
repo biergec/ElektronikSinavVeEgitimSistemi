@@ -30,10 +30,8 @@ function CanliYayiniSil(canliYayinGuid) {
             canliYayinGuid: canliYayinGuid
         },
         success: function (result) {
-            if (result.Data.isSuccess) {
+            if (result.data.isSuccess) {
                 window.location.href = "/CanliYayin/Index";
-            } else {
-                window.location.href = "/CanliYayin/CanliYayinDetaylari?canliYayinGuid="+result.data.canliYayinGuid.toString();
             }
         },
         error: function () {
