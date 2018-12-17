@@ -1,4 +1,6 @@
-﻿@using Microsoft.AspNet.Identity
+﻿@using BusinessLayer.SinavGiris
+@using EntityLayer.CanliYayin
+@using Microsoft.AspNet.Identity
 @model IEnumerable<EntityLayer.BaslayanSinavlar.AnaSayfaSinavlarimList>
 
 @{
@@ -61,8 +63,43 @@
                 </div>
             }
         </div>
+
+        <br />
+        <hr />
+        <br />
+
+        <div class="row">
+            <div class="card-header card-header-warning col-md-12">
+                <b>Katılabileceğim Canlı Dersler</b>
+            </div>
+        </div>
+
+        @if (ViewBag.OgrenciKatilabilecegiCanliYayinlar as List<CanliYayinDetaylari> != null)
+        {
+            <div class="row">
+                @foreach (var item in ViewBag.OgrenciKatilabilecegiCanliYayinlar as List<CanliYayinDetaylari>)
+                {
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header card-header-text card-header-primary">
+                                <div class="card-text">
+                                    <h4 class="card-title">Ders : <b>@item.CanliYayinDersAdi</b></h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                Canlı Yayın Başlama Zamanı : @item.CanliYayinBaslamaZamani
+                                <br />
+                                <a class="btn btn-facebook btn-sm col-md-12" asp-action="OgrenciCanliYayinEkrani" asp-route-canliYayinId="@item.CanliYayinId">Derse Katıl</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
     </div>
+
+
     <div class="col-md-4">
-        @await Component.InvokeAsync("Derslerim", User.Identity.GetUserId());
+        @await Component.InvokeAsync("Derslerim", User.Identity.GetUserId())
     </div>
 </div>

@@ -105,20 +105,20 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
             }
 
             var canliYayinDosyalari = new List<UploadFileInfo>();
-            long size = files.Sum(f => f.Length);
 
             foreach (var formFile in files)
             {
+                var fileName = GetUniqueFileName(formFile.FileName.Trim());
                 var filePath = Path.Combine(
                     Directory.GetCurrentDirectory(), "wwwroot\\images\\upload",
-                    GetUniqueFileName(formFile.FileName.Trim()));
+                    fileName);
 
                 if (formFile.Length > 0)
                 {
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         await formFile.CopyToAsync(stream);
-                        canliYayinDosyalari.Add(new UploadFileInfo { DosyaAdi = formFile.FileName.Trim(), DosyaYolu = filePath });
+                        canliYayinDosyalari.Add(new UploadFileInfo { DosyaAdi = fileName, DosyaYolu = filePath });
                     }
                 }
             }
@@ -160,7 +160,6 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
                 return new JsonResult(new Result { isSuccess = true, Data = canliYayinGuid }); ;
             }
         }
-
 
     }
 }

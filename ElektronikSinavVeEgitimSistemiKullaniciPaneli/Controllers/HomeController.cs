@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.CanliYayin;
 using BusinessLayer.DersIslemleri;
 using BusinessLayer.Sinav;
 using BusinessLayer.SinavGiris;
@@ -27,8 +29,9 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         private readonly ISinavBilgileri _sinavBilgileri;
         private readonly IEgitmenSinavBilgileri _egitmenSinavBilgileri;
         private readonly ISinavKayit _sinavKayit;
+        private readonly ICanliYayinIslemleri _canliYayinIslemleri;
 
-        public HomeController(IKayitliDerslerim kayitliDerslerim, IDersIslemleri dersIslemleri, IDersListesiSelectListItem dersListesiSelectListItem, IOgrenciGirebilecegiSinavlar ogrenciGirebilecegiSinavlar, ISinavBilgileri sinavBilgileri, IEgitmenSinavBilgileri egitmenSinavBilgileri, ISinavKayit sinavKayit)
+        public HomeController(IKayitliDerslerim kayitliDerslerim, IDersIslemleri dersIslemleri, IDersListesiSelectListItem dersListesiSelectListItem, IOgrenciGirebilecegiSinavlar ogrenciGirebilecegiSinavlar, ISinavBilgileri sinavBilgileri, IEgitmenSinavBilgileri egitmenSinavBilgileri, ISinavKayit sinavKayit, ICanliYayinIslemleri canliYayinIslemleri)
         {
             this._kayitliDerslerim = kayitliDerslerim;
             this._dersIslemleri = dersIslemleri;
@@ -37,6 +40,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
             this._sinavBilgileri = sinavBilgileri;
             this._egitmenSinavBilgileri = egitmenSinavBilgileri;
             this._sinavKayit = sinavKayit;
+            _canliYayinIslemleri = canliYayinIslemleri;
         }
 
 
@@ -46,7 +50,73 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
             var ogrenciGirebilecegiSinavListesi =
                 _ogrenciGirebilecegiSinavlar.OgrenciGirebilecegiSinavlar(Guid.Parse(User.Identity.GetUserId()));
 
+            ViewBag.OgrenciKatilabilecegiCanliYayinlar = _canliYayinIslemleri.OgrenciKatilabilecegiCanliYayinlar(Guid.Parse(User.Identity.GetUserId()));
+
             return View(ogrenciGirebilecegiSinavListesi);
+        }
+
+
+
+        public IActionResult OgrenciCanliYayinEkrani(string canliYayinId)
+        {
+            var canliYayinDetaylari = _canliYayinIslemleri.CanliYayinDetaylari(Guid.Parse(canliYayinId));
+
+            // Ogreci derse katılımını gerçekleştir.
+            bool ogrenciDersKatilimKayit =
+                _canliYayinIslemleri.OgrenciCanliYayinKatilimGerceklestir(Guid.Parse(User.Identity.GetUserId()),
+                    Guid.Parse(canliYayinId));
+
+            ViewBag.CanliYayinDokumanlari =
+                _canliYayinIslemleri.CanliYayinDokumanlariListele(Guid.Parse(canliYayinId));
+
+            if (ogrenciDersKatilimKayit)
+                return View(canliYayinDetaylari);
+            else
+                return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FileDownload(string filename)
+        {
+            if (filename == null)
+                return Content("Dosya bulunamadı");
+
+            var path = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot\\images\\upload", filename);
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            return File(memory, GetContentType(path), Path.GetFileName(path));
+        }
+
+        private string GetContentType(string path)
+        {
+            var types = GetMimeTypes();
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+            return types[ext];
+        }
+
+        private Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+                {".txt", "text/plain"},
+                {".pdf", "application/pdf"},
+                {".doc", "application/vnd.ms-word"},
+                {".docx", "application/vnd.ms-word"},
+                {".xls", "application/vnd.ms-excel"},
+                {".xlsx", "application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet"},
+                    {".png", "image/png"},
+                {".jpg", "image/jpeg"},
+                {".jpeg", "image/jpeg"},
+                {".gif", "image/gif"},
+                {".csv", "text/csv"}
+            };
         }
 
 

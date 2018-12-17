@@ -17,6 +17,7 @@ namespace BusinessLayer.CanliYayin
         private readonly ILogger<CanliYayinIslemleri> _logger;
         private readonly Microsoft.AspNetCore.Identity.UserManager<AppUser> _userManager;
 
+
         public CanliYayinIslemleri(IUnitOfWork unitOfWork, ILogger<CanliYayinIslemleri> logger, Microsoft.AspNetCore.Identity.UserManager<AppUser> userManager)
         {
             _unitOfWork = unitOfWork;
@@ -67,6 +68,7 @@ namespace BusinessLayer.CanliYayin
             }
         }
 
+
         public CanliYayinDetaylari CanliYayinDetaylari(Guid yayinId)
         {
             try
@@ -95,6 +97,7 @@ namespace BusinessLayer.CanliYayin
             }
         }
 
+
         public List<CanliYayinDokumanlari> CanliYayinDokumanlariListele(Guid canliYayinId)
         {
             try
@@ -107,6 +110,7 @@ namespace BusinessLayer.CanliYayin
                 return null;
             }
         }
+
 
         public bool CanliYayinDokumanSil(Guid dokumanlarIdGuid)
         {
@@ -128,6 +132,7 @@ namespace BusinessLayer.CanliYayin
             }
         }
 
+
         public bool CanliYayiniSil(Guid yayinId)
         {
             try
@@ -145,6 +150,7 @@ namespace BusinessLayer.CanliYayin
                 return false;
             }
         }
+
 
         public Result CanliYayinKayit(CanliYayinOlusturViewModel canliYayinOlusturViewModel, Guid canliYayinKayitEdenKisi)
         {
@@ -172,7 +178,6 @@ namespace BusinessLayer.CanliYayin
         }
 
 
-
         public bool CanliYayinUploadDosya(List<UploadFileInfo> dosyaFileInfos, Guid canliYayinId)
         {
             try
@@ -195,7 +200,6 @@ namespace BusinessLayer.CanliYayin
                 return false;
             }
         }
-
 
 
         public List<CanliYayinYoklama> CanliYayinYoklamaListesi(Guid canliYayinId)
@@ -227,6 +231,75 @@ namespace BusinessLayer.CanliYayin
             }
         }
 
+
+        public bool OgrenciCanliYayinKatilimGerceklestir(Guid ogrenciId, Guid canliYayinId)
+        {
+            try
+            {
+                // daha önce katıldıysa tekrar kayıt etme
+                var dahaOnceKatilimSorgula = _unitOfWork.CanliYayinaKatilanlarRepository.SingleOrDefault(x =>
+                    x.CanliYayinaKatilanKisiId == ogrenciId && x.CanliYayinId == canliYayinId);
+                if (dahaOnceKatilimSorgula == null)
+                {
+                    _unitOfWork.CanliYayinaKatilanlarRepository.Add(new CanliYayinaKatilanlar { CanliYayinaKatilanKisiId = ogrenciId, CanliYayinId = canliYayinId, CanliYayinKatilmaZamani = DateTime.Now });
+
+                    _unitOfWork.SaveChanges();
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Canlı yayın öğrenci kayıt etme hatası - > " + e);
+                return false;
+            }
+        }
+
+        public List<CanliYayinDetaylari> OgrenciKatilabilecegiCanliYayinlar(Guid ogrencGuid)
+        {
+            try
+            {
+                var katilabilecegiCanliYayinlar = new List<CanliYayinDetaylari>();
+
+                // Öğrencinin derslerini bul, dersi ile ilgili canlı yayın var mı bak varsa ekle
+                var ogreciDersleri = _unitOfWork.KayitliDerslerimRepository.Get(x => x.OgrenciId == ogrencGuid);
+
+                // Kayıtlı dersin canlı yayını varmı bul!
+                var canliYayinlar = _unitOfWork.CanliYayinRepository.GetAll();
+
+                // Katılabileceği bir şey olmayabilir
+                if (canliYayinlar == null || ogreciDersleri == null)
+                    return null;
+
+                var dersler =
+                    _unitOfWork.DerslerRepository.GetAll();
+
+                foreach (var item in ogreciDersleri)
+                {
+                    var canliYayin = canliYayinlar.SingleOrDefault(x => x.CanliYayinDersId == item.DerslerId && x.CanliYayinAktifMi == true);
+                    if (canliYayin != null)
+                    {
+                        katilabilecegiCanliYayinlar.Add(new CanliYayinDetaylari
+                        {
+                            CanliYayinAktifMi = canliYayin.CanliYayinAktifMi,
+                            CanliYayinBaslamaZamani = canliYayin.CanliYayinBaslamaZamani,
+                            CanliYayinDersId = canliYayin.CanliYayinDersId,
+                            CanliYayinId = canliYayin.CanliYayinId,
+                            CanliYayinYayinId = canliYayin.CanliYayinYayinId,
+                            CanliYayinBitisZamani = canliYayin.CanliYayinBitisZamani,
+                            CanliYayinDersAdi = dersler.FirstOrDefault(x => x.DerslerId == item.DerslerId).DersAdi
+                        });
+                    }
+                }
+
+                return katilabilecegiCanliYayinlar;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Öğrenci katıldığı dersler canlı listesi getirme hatası - > " + e);
+                return null;
+            }
+        }
 
 
         public List<CanliYayinDetaylari> OlusturdugumCanliYayinlar(Guid userId)

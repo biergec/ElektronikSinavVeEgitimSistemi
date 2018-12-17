@@ -1,0 +1,60 @@
+﻿@using EntityLayer.CanliYayin
+@model EntityLayer.CanliYayin.CanliYayinDetaylari
+@{
+    ViewData["Title"] = "OgrenciCanliYayinEkrani";
+}
+
+<div class="row">
+    <div class="card card-nav-tabs">
+        <div class="card-header card-header-success">
+            <b>Canlı Yayın : @Model.CanliYayinDersAdi</b>
+        </div>
+        <div class="card-body">
+        </div>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-12 center-block">
+        @{
+            string idx = "https://www.youtube.com/embed/" + Model.CanliYayinYayinId + "?controls=0;";
+
+            <iframe width="560" height="315" src="@idx" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        }
+    </div>
+</div>
+
+<br />
+<hr />
+<br />
+
+
+
+
+@if (ViewBag.CanliYayinDokumanlari as List<CanliYayinDokumanlari> != null)
+{
+    <div class="row">
+        @foreach (var item in ViewBag.CanliYayinDokumanlari as List<CanliYayinDokumanlari>)
+        {
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header card-header-text card-header-primary">
+                        <div class="card-text">
+                            <h4 class="card-title">@item.DokumanAdi</h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        Eklenme Zamanı : <b>@item.DokumanEklenmeTarihi</b>
+                        <br />
+
+                        <a class="btn btn-facebook btn-sm col-md-12" asp-action="FileDownload" asp-route-filename="@item.DokumanAdi">Yayın Detayları</a>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+

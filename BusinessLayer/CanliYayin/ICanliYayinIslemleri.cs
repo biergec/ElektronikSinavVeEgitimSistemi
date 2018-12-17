@@ -18,5 +18,9 @@ namespace BusinessLayer.CanliYayin
         bool CanliYayinUploadDosya(List<UploadFileInfo> dosyaFileInfos, Guid sinavId);
         List<CanliYayinDokumanlari> CanliYayinDokumanlariListele(Guid canliYayinId);
         bool CanliYayinDokumanSil(Guid dokumanlarIdGuid);
+
+        List<CanliYayinDetaylari> OgrenciKatilabilecegiCanliYayinlar(Guid ogreciId);
+        bool OgrenciCanliYayinKatilimGerceklestir(Guid ogrenciId, Guid canliYayinId);
+
     }
 }

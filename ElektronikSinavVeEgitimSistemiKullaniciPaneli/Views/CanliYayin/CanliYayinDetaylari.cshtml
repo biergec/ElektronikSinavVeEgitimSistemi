@@ -1,7 +1,8 @@
-﻿@using EntityLayer.CanliYayin
+﻿@using System.Collections
+@using EntityLayer.CanliYayin
 @model EntityLayer.CanliYayin.CanliYayinDetaylari
 @{
-    ViewData["Title"] = "CanliYayinDetaylari";
+    ViewData["Title"] = "Canli Yayin Detaylari";
 }
 
 @{
@@ -51,7 +52,6 @@
     <br />
     <hr />
     <br />
-
 
 
 
@@ -117,9 +117,9 @@
             </div>
         </div>
 
-        @if (ViewBag.YoklamaListesi is List<CanliYayinYoklama>)
+        @if (ViewBag.YoklamaListesi is List<CanliYayinYoklama> !=null)
         {
-            foreach (var item in ViewBag.YoklamaListesi as List<CanliYayinYoklama>)
+            foreach (var item in (IEnumerable<CanliYayinYoklama>)ViewBag.YoklamaListesi )
             {
                 <div class="card card-nav-tabs">
                     <div class="card-body">
