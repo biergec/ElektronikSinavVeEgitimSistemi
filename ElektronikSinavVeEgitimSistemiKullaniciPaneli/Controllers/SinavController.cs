@@ -16,8 +16,7 @@ using Newtonsoft.Json;
 
 namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 {
-    // [Authorize(Roles = "Admin,Egitmen")]
-    [Authorize]
+    [Authorize(Roles = "Egitmen, Admin")]
     public class SinavController : Controller
     {
         private readonly ISinavOlustur _sinavOlustur;
@@ -34,6 +33,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
+
         public IActionResult Index()
         {
             ViewBag.DersListesi = _dersListesiSelectListItem.DersListesi();
@@ -42,6 +42,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
+        
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Index(SinavOlusturmaSecenekleri sinavOlusturmaSecenekleri)
         {
@@ -225,7 +226,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<JsonResult> SinavSuresiniDeğiştir(string sinavId, int sinavSuresi)
         {
-            if (sinavSuresi < 0 || sinavSuresi == 0 || sinavId.Length < 1 )
+            if (sinavSuresi < 0 || sinavSuresi == 0 || sinavId.Length < 1)
                 return new JsonResult(new Result { isSuccess = false, Message = "Sınav süresi en az 1 dakika olabilir." });
 
             var result = await Task.FromResult(_sinavOlustur.SinavSuresiDegistir(Guid.Parse(sinavId), sinavSuresi));

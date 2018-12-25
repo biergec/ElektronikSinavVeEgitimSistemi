@@ -9,97 +9,114 @@
 
 <script src="~/js/My/HomePage.js"></script>
 
-<div class="row">
-    <div class="col-md-8">
-        <div class="row">
-            <div class="card card-nav-tabs">
-                <div class="card-header card-header-warning">
-                    <b>Yeni Ders Kaydı</b>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <select asp-items="@((IEnumerable<SelectListItem>) ViewBag.DersListesi)" id="dersListesi" class="form-control"></select>
-                        </div>
-                        <div class="col-md-7">
-                            <input type="text" class="form-control" id="inputDersKayitAnahtari" placeholder="Kayıt anahtarını giriniz...">
-                        </div>
-                        <div class="col-2">
-                            <button type="button" class="btn btn-success" onclick="YeniDersKayit()">Kayıt</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="card-header card-header-warning col-md-12">
-                <b>Katılabileceğim Sınavlar</b>
-            </div>
-        </div>
-
-        <div class="row">
-            @foreach (var item in Model)
-            {
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header card-header-text card-header-primary">
-                            <div class="card-text">
-                                <h4 class="card-title">@item.DersAdi Sınavı</h4>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            Sınav <b>@item.SinavSuresiDakika</b> dakika sürecektir. <br />Süreniz sınava başladıktan sonra başlar ve sınav süresi sonunda sona erer.
-                            <br />Lütfen sınava başlamadan önce hazırlıklı olun. Başarılar.
-                            <br />
-                            <a class="btn btn-facebook btn-sm col-md-12" asp-action="SinavaBasla" asp-route-sinavId="@item.SinavId">Sınava Başla</a>
-                        </div>
-                        <div class="card-footer">
-                            <div class="stats">
-                                <i class="material-icons">access_time</i> Sınav Süresi : @item.SinavSuresiDakika | Sinav Türü : @item.SinavTuru
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-
-        <br />
-        <hr />
-        <br />
-
-        <div class="row">
-            <div class="card-header card-header-warning col-md-12">
-                <b>Katılabileceğim Canlı Dersler</b>
-            </div>
-        </div>
-
-        @if (ViewBag.OgrenciKatilabilecegiCanliYayinlar as List<CanliYayinDetaylari> != null)
-        {
+@if (User.IsInRole("Admin") || User.IsInRole("Ogrenci"))
+{
+    <div class="row">
+        <div class="col-md-8">
             <div class="row">
-                @foreach (var item in ViewBag.OgrenciKatilabilecegiCanliYayinlar as List<CanliYayinDetaylari>)
+                <div class="card card-nav-tabs">
+                    <div class="card-header card-header-warning">
+                        <b>Yeni Ders Kaydı</b>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <select asp-items="@((IEnumerable<SelectListItem>) ViewBag.DersListesi)" id="dersListesi" class="form-control"></select>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" id="inputDersKayitAnahtari" placeholder="Kayıt anahtarını giriniz...">
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-success" onclick="YeniDersKayit()">Kayıt</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="card-header card-header-warning col-md-12">
+                    <b>Katılabileceğim Sınavlar</b>
+                </div>
+            </div>
+
+            <div class="row">
+                @foreach (var item in Model)
                 {
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-header card-header-text card-header-primary">
                                 <div class="card-text">
-                                    <h4 class="card-title">Ders : <b>@item.CanliYayinDersAdi</b></h4>
+                                    <h4 class="card-title">@item.DersAdi Sınavı</h4>
                                 </div>
                             </div>
                             <div class="card-body">
-                                Canlı Yayın Başlama Zamanı : @item.CanliYayinBaslamaZamani
+                                Sınav <b>@item.SinavSuresiDakika</b> dakika sürecektir. <br />Süreniz sınava başladıktan sonra başlar ve sınav süresi sonunda sona erer.
+                                <br />Lütfen sınava başlamadan önce hazırlıklı olun. Başarılar.
                                 <br />
-                                <a class="btn btn-facebook btn-sm col-md-12" asp-action="OgrenciCanliYayinEkrani" asp-route-canliYayinId="@item.CanliYayinId">Derse Katıl</a>
+                                <a class="btn btn-sm col-md-12" asp-action="SinavaBasla" asp-route-sinavId="@item.SinavId">Sınava Başla</a>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    <i class="material-icons">access_time</i> Sınav Süresi : @item.SinavSuresiDakika | Sinav Türü : @item.SinavTuru
+                                </div>
                             </div>
                         </div>
                     </div>
                 }
             </div>
-        }
-    </div>
+
+            <br />
+            <hr />
+            <br />
+
+            <div class="row">
+                <div class="card-header card-header-warning col-md-12">
+                    <b>Katılabileceğim Canlı Dersler</b>
+                </div>
+            </div>
+
+            @if (ViewBag.OgrenciKatilabilecegiCanliYayinlar as List<CanliYayinDetaylari> != null)
+            {
+                <div class="row">
+                    @foreach (var item in ViewBag.OgrenciKatilabilecegiCanliYayinlar as List<CanliYayinDetaylari>)
+                    {
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header card-header-text card-header-primary">
+                                    <div class="card-text">
+                                        <h4 class="card-title">Ders : <b>@item.CanliYayinDersAdi</b></h4>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    Canlı Yayın Başlama Zamanı : @item.CanliYayinBaslamaZamani
+                                    <br />
+                                    <a class="btn col-md-12" asp-action="OgrenciCanliYayinEkrani" asp-controller="Home" asp-route-canliYayinId="@item.CanliYayinId">Derse Katıl</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
 
 
-    <div class="col-md-4">
-        @await Component.InvokeAsync("Derslerim", User.Identity.GetUserId())
+        <div class="col-md-4">
+            @await Component.InvokeAsync("Derslerim", User.Identity.GetUserId())
+        </div>
     </div>
-</div>
+}else
+{
+    <div class="row">
+        <div class="card card-nav-tabs">
+            <div class="card-header card-header-warning">
+                <b>Sisteme Hoş Geldiniz</b>
+            </div>
+            <div class="card-body">
+                Yapmak istediğiniz işlemleri sağ taraftaki menü yardımıyla yapabilirsiniz.
+            </div>
+        </div>
+    </div>
+}
+
+

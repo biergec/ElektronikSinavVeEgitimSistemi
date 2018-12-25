@@ -53,21 +53,49 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
                     optionsBuilder =>
                         optionsBuilder.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name)));
 
-            services.AddIdentityCore<AppUser>(options => { });
+            services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<EfContext>()
+                .AddDefaultTokenProviders();
 
-            services.AddDefaultIdentity<AppUser>(options =>
-                {
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequiredLength = 6;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequiredUniqueChars = 1;
-                    options.User.RequireUniqueEmail = true;
-                })
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<EfContext>();
+            //Password Strength Setting
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 3;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequiredUniqueChars = 0;
+                options.Password.RequireDigit = false;
 
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings
+                options.User.RequireUniqueEmail = true;
+            });
+
+            //Setting the Account Login page
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                options.LoginPath = "/Home/Index"; // If the LoginPath is not set here,
+                // ASP.NET Core will default to /Account/Login
+                options.LogoutPath = "/Login/Index"; // If the LogoutPath is not set here,
+                // ASP.NET Core will default to /Account/Logout
+                options.AccessDeniedPath = "/Pages/AccessDenied"; // If the AccessDeniedPath is
+                // not set here, ASP.NET Core 
+                // will default to 
+                // /Account/AccessDenied
+                options.SlidingExpiration = true;
+            });
+
+            //services.AddDefaultIdentity<AppUser>().AddRoles<IdentityRole>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IKayitOl, KayitOlManager>();
@@ -101,11 +129,10 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, RoleManager<IdentityRole> roleManager, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, RoleManager<IdentityRole> roleManager, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
-                EnsureRolesAsync(roleManager).Wait();
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -117,10 +144,10 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
             // Serilog'u LoggerFactory'e ekleyip uygulamanın serilog üzerinden logging yapacağını belirtiyoruz
             loggerFactory.AddSerilog();
 
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
@@ -128,23 +155,44 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            CreateUserRoles(serviceProvider).Wait();
         }
 
-
-        // Rollerin development anında eklenmesi 
-        private static async Task EnsureRolesAsync(RoleManager<IdentityRole> roleManager)
+        private async Task CreateUserRoles(IServiceProvider serviceProvider)
         {
-            var roleAlreadyExistAdmin = await roleManager.RoleExistsAsync(UyelikTuru.Admin.ToString());
-            if (!roleAlreadyExistAdmin)
-                await roleManager.CreateAsync(new IdentityRole(UyelikTuru.Admin.ToString()));
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
 
-            var roleAlreadyExistEgitmen = await roleManager.RoleExistsAsync(UyelikTuru.Egitmen.ToString());
-            if (!roleAlreadyExistEgitmen)
-                await roleManager.CreateAsync(new IdentityRole(UyelikTuru.Egitmen.ToString()));
+            IdentityResult roleResult;
+            //Adding Admin Role
+            var roleCheck = await RoleManager.RoleExistsAsync("Admin");
+            if (!roleCheck)
+            {
+                //create the roles and seed them to the database
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
+            }
 
-            var roleAlreadyExistOgrenci = await roleManager.RoleExistsAsync(UyelikTuru.Ogrenci.ToString());
-            if (!roleAlreadyExistOgrenci)
-                await roleManager.CreateAsync(new IdentityRole(UyelikTuru.Ogrenci.ToString()));
+            var roleCheck2 = await RoleManager.RoleExistsAsync("Egitmen");
+            if (!roleCheck2)
+            {
+                //create the roles and seed them to the database
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("Egitmen"));
+            }
+
+            var roleCheck3 = await RoleManager.RoleExistsAsync("Ogrenci");
+            if (!roleCheck3)
+            {
+                //create the roles and seed them to the database
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("Ogrenci"));
+            }
+
+            //Assign Admin role to the main User here we have given our newly registered 
+            //login id for Admin management
+            var user = await UserManager.FindByEmailAsync("mustafaergec225@gmail.com");
+            await UserManager.AddToRoleAsync(user, "Egitmen");
+            await UserManager.AddToRoleAsync(user, "Admin");
         }
+
     }
 }

@@ -8,11 +8,13 @@ using BusinessLayer.DersIslemleri;
 using EntityLayer;
 using EntityLayer.CanliYayin;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 {
+    [Authorize(Roles = "Egitmen, Admin, Ogrenci")]
     public class CanliYayinController : Controller
     {
         private readonly ICanliYayinIslemleri _canliYayinIslemleri;
@@ -23,6 +25,9 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
             _dersListesiSelectListItem = dersListesiSelectListItem;
         }
 
+        
+        
+        [Authorize(Roles = "Egitmen, Admin")]
         public IActionResult Index()
         {
             var canliYayinListem =
@@ -32,7 +37,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
-        // TODO Sadeceğitmenler yapabilsin
+        [Authorize(Roles = "Egitmen, Admin")]
         public IActionResult CanliYayinOlustur()
         {
             ViewBag.DersListesi = _dersListesiSelectListItem.DersListesi();
@@ -40,7 +45,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
-        // TODO Sadeceğitmenler yapabilsin
+        [Authorize(Roles = "Egitmen, Admin")]
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult CanliYayinOlustur(CanliYayinOlusturViewModel canliYayinOlusturViewModel)
         {
@@ -66,7 +71,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
-        // TODO Sadeceğitmenler yapabilsin
+        [Authorize(Roles = "Egitmen, Admin")]
         public IActionResult CanliYayinDetaylari(string canliYayinGuid)
         {
             var canliYayinDetaylari = _canliYayinIslemleri.CanliYayinDetaylari(Guid.Parse(canliYayinGuid));
@@ -80,6 +85,8 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
+
+        [Authorize(Roles = "Egitmen, Admin")]
         [HttpPost, ValidateAntiForgeryToken]
         public JsonResult CanliYayinBaslat(string canliYayinGuid)
         {
@@ -88,6 +95,8 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
+
+        [Authorize(Roles = "Egitmen, Admin")]
         [HttpPost, ValidateAntiForgeryToken]
         public JsonResult CanliYayinSonlandir(string canliYayinGuid)
         {
@@ -96,6 +105,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
+        [Authorize(Roles = "Egitmen, Admin")]
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> UploadFiles(List<IFormFile> files, string canliYayinId)
         {
@@ -129,6 +139,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
+        [Authorize(Roles = "Egitmen, Admin")]
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult CanliYayiniYuklenenDosyayiSil(string dosyaDokumanId, string canliYayinGuid)
         {
@@ -147,6 +158,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
+        [Authorize(Roles = "Egitmen, Admin")]
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult CanliYayiniSil(string canliYayinGuid)
         {

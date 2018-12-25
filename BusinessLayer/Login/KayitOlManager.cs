@@ -38,7 +38,7 @@ namespace BusinessLayer.Login
                 UserName = kayitOlViewModel.Email.ToLower()
             };
             var identityResultKayit = await _userManager.CreateAsync(user, kayitOlViewModel.Password);
-            if (identityResultKayit.Errors != null)
+            if (identityResultKayit.Errors.Count() != 0)
             {
                 return new Result { isSuccess = false, Message = identityResultKayit.Errors.First().Description };
             }

@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 {
+    [Authorize(Roles = "Egitmen, Admin")]
     public class SinavNotlandirmaController : Controller
     {
         private readonly IDersIslemleri _dersIslemleri;

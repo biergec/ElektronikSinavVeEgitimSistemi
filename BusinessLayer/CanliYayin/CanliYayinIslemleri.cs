@@ -276,9 +276,10 @@ namespace BusinessLayer.CanliYayin
 
                 foreach (var item in ogreciDersleri)
                 {
-                    var canliYayin = canliYayinlar.SingleOrDefault(x => x.CanliYayinDersId == item.DerslerId && x.CanliYayinAktifMi == true);
+                    var canliYayin = canliYayinlar.First(x => x.CanliYayinDersId == item.DerslerId && x.CanliYayinAktifMi == true);
                     if (canliYayin != null)
                     {
+                        var dersAdi = dersler.FirstOrDefault(x => x.DerslerId == item.DerslerId).DersAdi;
                         katilabilecegiCanliYayinlar.Add(new CanliYayinDetaylari
                         {
                             CanliYayinAktifMi = canliYayin.CanliYayinAktifMi,
@@ -287,7 +288,7 @@ namespace BusinessLayer.CanliYayin
                             CanliYayinId = canliYayin.CanliYayinId,
                             CanliYayinYayinId = canliYayin.CanliYayinYayinId,
                             CanliYayinBitisZamani = canliYayin.CanliYayinBitisZamani,
-                            CanliYayinDersAdi = dersler.FirstOrDefault(x => x.DerslerId == item.DerslerId).DersAdi
+                            CanliYayinDersAdi = dersAdi
                         });
                     }
                 }

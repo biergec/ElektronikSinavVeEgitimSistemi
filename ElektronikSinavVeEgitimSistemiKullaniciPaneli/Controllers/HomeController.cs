@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Egitmen, Admin, Ogrenci")]
     public class HomeController : Controller
     {
         private readonly IKayitliDerslerim _kayitliDerslerim;
@@ -56,7 +56,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin, Ogrenci")]
         public IActionResult OgrenciCanliYayinEkrani(string canliYayinId)
         {
             var canliYayinDetaylari = _canliYayinIslemleri.CanliYayinDetaylari(Guid.Parse(canliYayinId));
@@ -75,6 +75,8 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
                 return RedirectToAction("Index");
         }
 
+       
+        [Authorize(Roles = "Admin, Ogrenci")]
         [HttpGet]
         public async Task<IActionResult> FileDownload(string filename)
         {
@@ -120,6 +122,8 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
+        
+        [Authorize(Roles = "Admin, Ogrenci")]
         public IActionResult SinavaBasla(string sinavId)
         {
             var sinavTuru = _sinavBilgileri.SinavBilgileri(Guid.Parse(sinavId));
@@ -136,6 +140,8 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
+        
+        [Authorize(Roles = "Admin, Ogrenci")]
         public IActionResult KlasikSinavSinavaBasla(string sinavId)
         {
             // Sayfaya yönlendirmeden önce sınav başlangıcını kaydet 
@@ -151,6 +157,8 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 
 
 
+        
+        [Authorize(Roles = "Admin, Ogrenci")]
         public IActionResult TestSinavSinavaBasla(string sinavId)
         {
             // Sayfaya yönlendirmeden önce sınav başlangıcını kaydet 
@@ -166,6 +174,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 
 
 
+        [Authorize(Roles = "Admin, Ogrenci")]
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<JsonResult> GirilenTestSinaviniKayitEt(TestSinavSinaviKayitEtViewModel testSinavSinaviKayitEtViewModel)
         {
@@ -178,6 +187,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 
 
 
+        [Authorize(Roles = "Admin, Egitmen")]
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<JsonResult> KayitliDersSil(string dersId)
         {
@@ -189,6 +199,8 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
+        
+        [Authorize(Roles = "Admin, Ogrenci")]
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<JsonResult> OgrenciYeniDersKaydi(string dersId, string dersKayitAnahtari)
         {
@@ -200,6 +212,8 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
         }
 
 
+        
+        [Authorize(Roles = "Admin, Ogrenci")]
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<JsonResult> KlasikSinavSinavKayit(KlasikSinavSinavKayitViewModel klasikSinavSinavKayit)
         {
@@ -212,31 +226,5 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli.Controllers
 
 
 
-
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }
