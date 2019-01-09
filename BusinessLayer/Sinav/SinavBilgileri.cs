@@ -51,7 +51,8 @@ namespace BusinessLayer.Sinav
 
             foreach (var item in sinavaGirenKisilerIdList)
             {
-                var sinavSahibiOgrenci = tumKullanicilar.FirstOrDefault(x => x.Id == item.Sinav.SinavSahibi.ToString());
+                var ogrenciIdSinavId = _unitOfWork.SuresiBaslamisSinavlarRepository.SingleOrDefault(x=>x.SinavId == item.SinavId).OgrenciId;
+                var sinavSahibiOgrenci = tumKullanicilar.FirstOrDefault(x => x.Id == ogrenciIdSinavId.ToString());
 
                 if (item.Sinav.SinavTuru == SinavTuru.Klasik)
                 {

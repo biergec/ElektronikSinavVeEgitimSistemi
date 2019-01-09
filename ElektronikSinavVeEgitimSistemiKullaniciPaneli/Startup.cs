@@ -88,7 +88,7 @@ namespace ElektronikSinavVeEgitimSistemiKullaniciPaneli
                 // ASP.NET Core will default to /Account/Login
                 options.LogoutPath = "/Login/Index"; // If the LogoutPath is not set here,
                 // ASP.NET Core will default to /Account/Logout
-                options.AccessDeniedPath = "/Pages/AccessDenied"; // If the AccessDeniedPath is
+                options.AccessDeniedPath = "/Home/Index"; // If the AccessDeniedPath is
                 // not set here, ASP.NET Core 
                 // will default to 
                 // /Account/AccessDenied
